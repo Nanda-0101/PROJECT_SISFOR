@@ -6,6 +6,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login-mahasiswa', function () {
-    return view('mahasiswa.mahasiswa_login');
+Route::get('/public-login', function () {
+    return view('public.loginpage_public'); 
+});
+
+Route::get('/public-landingpage', function () {
+    return view('public.landingpage_public'); 
 });

@@ -14,7 +14,7 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="col-md-6 left-section" style="background-image: url('{{ assets('assets/Landing Page.png') }}');">
+        <div class="col-md-6 left-section" style="background-image: url('{{ asset('assets/Landing Page .png') }}');">
             <div class="content-left">
                 <h2 id="title">Halo<br><span style="white-space: nowrap;">Mahasiswa Informatika 👋</span></h2>
                 <p id="desc">
@@ -27,8 +27,8 @@
             <div class="login-box">
 
                 <div class="logo-container mb-2">
-                    <img src="{{ assets('assets/Logo - Unud.png') }}" alt="Logo Unud" class="brand-logo">
-                    <img src="{{ assets('assets/Logo - Informatika.png') }}" alt="Logo Informatika" class="brand-logo">
+                    <img src="{{ asset('assets/Logo - Unud.png') }}" alt="Logo Unud" class="brand-logo">
+                    <img src="{{ asset('assets/Logo - Informatika.png') }}" alt="Logo Informatika" class="brand-logo">
                 </div>
                 <h3 class="brand-title">SIVENPUS</h3>
 
@@ -54,18 +54,18 @@
                         <input
                             type="text"
                             class="form-control"
-                            name="nim"
-                            placeholder="NIM"
+                            name="Username"
+                            placeholder="Username"
                             required
                         >
                     </div>
 
                     <div class="mb-3">
                         <input
-                            type="password"
+                            type="Password"
                             class="form-control"
-                            name="password"
-                            placeholder="Kata sandi"
+                            name="Password"
+                            placeholder="Password"
                             required
                         >
                     </div>

@@ -21,3 +21,15 @@ Route::get('/admin-pembuatanevent', function () {
 Route::get('/admin-kelolaadmin', function () {
     return view('admin.kelolaAdmin_admin'); 
 });
+
+Route::get('/admin-kelolaevent', function () {
+    return view('admin.kelolaEvent_admin'); 
+});
+
+Route::get('/admin-kelolapanitia', function () {
+    return view('admin.kelolaPanitia_admin'); 
+});
+
+Route::get('/admin-profiladmin', function () {
+    return view('admin.profil_admin'); 
+});

@@ -9,3 +9,15 @@ Route::get('/panitia-login', function () {
 Route::get('/public-landingpage', function () {
     return view('public.landingpage_public'); 
 });
+
+Route::get('/admin-dashboardadmin', function () {
+    return view('admin.dashboard_admin'); 
+});
+
+Route::get('/admin-pembuatanevent', function () {
+    return view('admin.buatEvent_admin'); 
+});
+
+Route::get('/admin-kelolaadmin', function () {
+    return view('admin.kelolaAdmin_admin'); 
+});

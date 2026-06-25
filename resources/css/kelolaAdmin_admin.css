@@ -1,0 +1,46 @@
+/* Styling Khusus Tabel Admin */
+.glass-table-wrapper {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.glass-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Memberi jarak antar baris agar tidak sesak */
+}
+
+.glass-table th {
+    padding: 20px;
+    color: #4A5568;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.glass-table td {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Rounded corners untuk baris pertama dan terakhir */
+.glass-table tbody tr td:first-child { border-left: 1px solid rgba(255,255,255,0.5); border-radius: 15px 0 0 15px; }
+.glass-table tbody tr td:last-child { border-right: 1px solid rgba(255,255,255,0.5); border-radius: 0 15px 15px 0; }
+
+.glass-table tbody tr {
+    transition: transform 0.2s ease;
+}
+
+.glass-table tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* Input Pencarian */
+.search-wrapper .glass-input {
+    background: rgba(255, 255, 255, 0.8);
+    max-width: 300px;
+}

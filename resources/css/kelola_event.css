@@ -1,39 +1,433 @@
-/* Menggunakan base style yang sama dengan dashboard_admin.css */
-@import url('dashboard_admin.css'); /* Jika file di folder yang sama, atau copy seluruh isi dashboard_admin.css ke sini */
+/* =============================================
+   KELOLA EVENT — SIVENTUS
+   Base: @import dashboard_admin.css (tidak diubah)
+   Perbaikan: area konten utama saja
+   ============================================= */
+@import url('dashboard_admin.css');
 
-/* Tambahan Style Khusus Halaman Kelola Event */
+
+/* ─── Welcome Banner ─────────────────────────── */
+.welcome-banner {
+    background: linear-gradient(135deg, #3D28E0 0%, #5B45F5 55%, #8B6FF7 100%);
+    border-radius: 16px;
+    padding: 26px 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(61, 40, 224, 0.35);
+}
+
+.welcome-banner::before {
+    content: '';
+    position: absolute;
+    top: -70px; right: -70px;
+    width: 210px; height: 210px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.welcome-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -55px; right: 130px;
+    width: 150px; height: 150px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.welcome-banner h4 {
+    font-size: 20px;
+    letter-spacing: -0.2px;
+    color: #fff;
+}
+
+.welcome-banner p {
+    font-size: 13px;
+}
+
+
+/* ─── Tombol Tambah Event ────────────────────── */
 .btn-tambah-top {
-    background-color: #4F39F6;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 25px;
-    font-size: 14px;
-    transition: background 0.2s;
+    background: rgba(255,255,255,0.14);
+    color: #fff !important;
+    border: 1.5px solid rgba(255,255,255,0.38) !important;
+    border-radius: 10px;
+    padding: 9px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
 }
 
 .btn-tambah-top:hover {
-    background-color: #3121A3;
-    color: white;
+    background: rgba(255,255,255,0.26);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.20);
+    color: #fff !important;
 }
 
+
+/* ─── Stat Cards ─────────────────────────────── */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: #fff;
+    border: 1px solid #EAECF4;
+    border-radius: 14px;
+    padding: 18px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    box-shadow: 0 4px 18px rgba(79,57,246,0.10);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    border-radius: 14px 0 0 14px;
+}
+
+.stat-card.card-total::before  { background: #4F39F6; }
+.stat-card.card-aktif::before  { background: #10B981; }
+.stat-card.card-datang::before { background: #F59E0B; }
+
+.stat-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.stat-card.card-total  .stat-icon { background: #EEEDFD; color: #4F39F6; }
+.stat-card.card-aktif  .stat-icon { background: #D1FAE5; color: #059669; }
+.stat-card.card-datang .stat-icon { background: #FEF3C7; color: #D97706; }
+
+.stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #94A3B8;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1A202C;
+    line-height: 1;
+}
+
+.stat-sub {
+    font-size: 12px;
+    color: #94A3B8;
+    margin-top: 5px;
+}
+
+
+/* ─── Filter & Search Bar ────────────────────── */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.filter-bar .input-search-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+}
+
+.filter-bar .input-search-wrapper i {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #B0BAC9;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.filter-bar .form-control,
+.filter-bar .form-select {
+    border: 1.5px solid #E4E9F0;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #3D4A5C;
+    background: #FAFBFC;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-bar .form-control {
+    padding: 9px 14px 9px 38px;
+}
+
+.filter-bar .form-select {
+    padding: 9px 36px 9px 14px;
+    width: auto;
+}
+
+.filter-bar .form-control:focus,
+.filter-bar .form-select:focus {
+    border-color: #4F39F6;
+    box-shadow: 0 0 0 3px rgba(79,57,246,0.10);
+    outline: none;
+    background: #fff;
+}
+
+
+/* ─── Data Card & Tabel ──────────────────────── */
 .data-card {
-    border: 1px solid #E2E8F0;
+    border: 1px solid #EAECF4 !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05) !important;
+    /* override Bootstrap p-4 biar tabel flush ke edge */
+    padding: 0 !important;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead tr {
+    background: #F7F8FC;
 }
 
 .table th {
-    font-weight: 600;
-    color: #4A5568;
-    border-bottom: 2px solid #E2E8F0;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.65px;
+    color: #8A94A6;
+    padding: 13px 18px;
+    background: #F7F8FC;
+    border-bottom: 1.5px solid #E8EBF3;
+    white-space: nowrap;
 }
 
 .table td {
+    font-size: 13px;
     color: #2D3748;
-    font-size: 14px;
+    padding: 14px 18px;
+    vertical-align: middle;
+    border-bottom: 1px solid #F1F4FA;
 }
 
-.badge {
-    padding: 6px 12px;
-    border-radius: 6px;
+.table tbody tr {
+    transition: background 0.15s;
+}
+
+.table tbody tr:hover {
+    background: #F5F3FF;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Nomor baris */
+.row-num {
+    font-size: 12px;
+    font-weight: 600;
+    color: #B0BAC9;
+}
+
+/* Sel nama event */
+.event-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.event-icon-box {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: #EEEDFD;
+    color: #4F39F6;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.event-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1A202C;
+    line-height: 1.3;
+}
+
+.event-meta {
+    font-size: 11px;
+    color: #A0AEC0;
+    margin-top: 2px;
+}
+
+/* Tanggal */
+.date-primary {
+    font-size: 13px;
     font-weight: 500;
+    color: #2D3748;
+}
+
+.date-secondary {
+    font-size: 11px;
+    color: #A0AEC0;
+    margin-top: 2px;
+}
+
+/* Kategori chip */
+.kategori-chip {
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.chip-seminar    { background: #EEF2FF; color: #3730A3; }
+.chip-workshop   { background: #FEF9C3; color: #854D0E; }
+.chip-kompetisi  { background: #DCFCE7; color: #14532D; }
+.chip-talkshow   { background: #FCE7F3; color: #9D174D; }
+.chip-default    { background: #F1F5F9; color: #475569; }
+
+/* Badge status */
+.badge {
+    padding: 5px 12px !important;
+    border-radius: 20px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+}
+
+.badge.bg-success {
+    background: #DCFCE7 !important;
+    color: #14532D !important;
+}
+
+.badge.bg-warning {
+    background: #FEF9C3 !important;
+    color: #854D0E !important;
+}
+
+.badge.bg-secondary {
+    background: #F1F5F9 !important;
+    color: #64748B !important;
+}
+
+.badge.bg-danger {
+    background: #FEE2E2 !important;
+    color: #991B1B !important;
+}
+
+/* Tombol aksi */
+.btn-action-wrap {
+    display: flex;
+    gap: 6px;
+}
+
+.btn.btn-sm.btn-outline-primary,
+.btn.btn-sm.btn-outline-danger {
+    width: 32px; height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: all 0.18s;
+}
+
+.btn.btn-sm.btn-outline-primary {
+    background: #EEF2FF;
+    border-color: #C7D2FE !important;
+    color: #4F39F6;
+}
+
+.btn.btn-sm.btn-outline-primary:hover {
+    background: #4F39F6;
+    border-color: #4F39F6 !important;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(79,57,246,0.28);
+}
+
+.btn.btn-sm.btn-outline-danger {
+    background: #FFF1F1;
+    border-color: #FECACA !important;
+    color: #EF4444;
+}
+
+.btn.btn-sm.btn-outline-danger:hover {
+    background: #EF4444;
+    border-color: #EF4444 !important;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(239,68,68,0.28);
+}
+
+/* Pagination footer */
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: #F7F8FC;
+    border-top: 1px solid #E8EBF3;
+}
+
+.table-footer-info {
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+.page-link {
+    border-radius: 8px !important;
+    font-size: 12px;
+    font-weight: 600;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.15s;
+}
+
+.page-item.active .page-link {
+    background: #4F39F6 !important;
+    border-color: #4F39F6 !important;
+}
+
+.page-item:not(.active) .page-link {
+    color: #64748B;
+    border-color: #E2E8F0 !important;
+    background: #fff;
+}
+
+.page-item:not(.active) .page-link:hover {
+    background: #EEF2FF;
+    color: #4F39F6;
+    border-color: #C7D2FE !important;
 }

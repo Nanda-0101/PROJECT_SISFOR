@@ -1,33 +1,343 @@
-/* Anda dapat copy isi file dashboard_admin.css kesini sebagai base class-nya */
+/* =============================================
+   KELOLA PANITIA — SIVENTUS
+   Base: @import dashboard_admin.css (tidak diubah)
+   Perbaikan: area konten utama saja
+   ============================================= */
 @import url('dashboard_admin.css');
 
-/* Style Khusus Kelola Panitia */
+
+/* ─── Welcome Banner ─────────────────────────── */
+.welcome-banner {
+    background: linear-gradient(135deg, #3D28E0 0%, #5B45F5 55%, #8B6FF7 100%);
+    border-radius: 16px;
+    padding: 26px 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(61, 40, 224, 0.35);
+}
+
+.welcome-banner::before {
+    content: '';
+    position: absolute;
+    top: -70px; right: -70px;
+    width: 210px; height: 210px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.welcome-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -55px; right: 130px;
+    width: 150px; height: 150px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.welcome-banner h4 {
+    font-size: 20px;
+    letter-spacing: -0.2px;
+    color: #fff;
+}
+
+.welcome-banner p {
+    font-size: 13px;
+}
+
+
+/* ─── Tombol Tambah Panitia ──────────────────── */
 .btn-tambah-top {
-    background-color: #4F39F6;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 25px;
-    font-size: 14px;
-    transition: background 0.2s;
+    background: rgba(255,255,255,0.14);
+    color: #fff !important;
+    border: 1.5px solid rgba(255,255,255,0.38) !important;
+    border-radius: 10px;
+    padding: 9px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
 }
 
 .btn-tambah-top:hover {
-    background-color: #3121A3;
-    color: white;
+    background: rgba(255,255,255,0.26);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.20);
+    color: #fff !important;
 }
 
+
+/* ─── Filter Bar ─────────────────────────────── */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.filter-bar .input-search-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+}
+
+.filter-bar .input-search-wrapper i {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #B0BAC9;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.filter-bar .form-control,
+.filter-bar .form-select {
+    border: 1.5px solid #E4E9F0;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #3D4A5C;
+    background: #FAFBFC;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-bar .form-control {
+    padding: 9px 14px 9px 38px;
+}
+
+.filter-bar .form-select {
+    padding: 9px 36px 9px 14px;
+    width: auto;
+}
+
+.filter-bar .form-control:focus,
+.filter-bar .form-select:focus {
+    border-color: #4F39F6;
+    box-shadow: 0 0 0 3px rgba(79,57,246,0.10);
+    outline: none;
+    background: #fff;
+}
+
+
+/* ─── Data Card & Tabel ──────────────────────── */
 .data-card {
-    border: 1px solid #E2E8F0;
+    border: 1px solid #EAECF4 !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05) !important;
+    padding: 0 !important;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead tr {
+    background: #F7F8FC;
 }
 
 .table th {
-    font-weight: 600;
-    color: #4A5568;
-    border-bottom: 2px solid #E2E8F0;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.65px;
+    color: #8A94A6;
+    padding: 13px 18px;
+    background: #F7F8FC;
+    border-bottom: 1.5px solid #E8EBF3;
+    white-space: nowrap;
 }
 
 .table td {
+    font-size: 13px;
     color: #2D3748;
-    font-size: 14px;
+    padding: 14px 18px;
+    vertical-align: middle;
+    border-bottom: 1px solid #F1F4FA;
+}
+
+.table tbody tr {
+    transition: background 0.15s;
+}
+
+.table tbody tr:hover {
+    background: #F5F3FF;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Nomor baris */
+.row-num {
+    font-size: 12px;
+    font-weight: 600;
+    color: #B0BAC9;
+}
+
+/* Sel nama panitia dengan avatar */
+.panitia-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.panitia-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #4F39F6, #9F7AEA);
+}
+
+.panitia-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1A202C;
+    line-height: 1.3;
+}
+
+.panitia-role {
+    font-size: 11px;
+    color: #A0AEC0;
+    margin-top: 2px;
+}
+
+/* Email */
+.email-text {
+    font-size: 13px;
+    color: #64748B;
+}
+
+/* Divisi badge */
+.divisi-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.divisi-acara      { background: #DBEAFE; color: #1E3A8A; }
+.divisi-logistik   { background: #DCFCE7; color: #14532D; }
+.divisi-humas      { background: #FEF9C3; color: #854D0E; }
+.divisi-publikasi  { background: #FCE7F3; color: #9D174D; }
+.divisi-konsumsi   { background: #FEE2E2; color: #991B1B; }
+.divisi-default    { background: #F1F5F9; color: #475569; }
+
+/* Tombol aksi */
+.btn-action-wrap {
+    display: flex;
+    gap: 6px;
+}
+
+.btn.btn-sm.btn-outline-info,
+.btn.btn-sm.btn-outline-primary,
+.btn.btn-sm.btn-outline-danger {
+    width: 32px; height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: all 0.18s;
+}
+
+.btn.btn-sm.btn-outline-info {
+    background: #F0F9FF;
+    border-color: #BAE6FD !important;
+    color: #0284C7;
+}
+
+.btn.btn-sm.btn-outline-info:hover {
+    background: #0284C7;
+    border-color: #0284C7 !important;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(2,132,199,0.28);
+}
+
+.btn.btn-sm.btn-outline-primary {
+    background: #EEF2FF;
+    border-color: #C7D2FE !important;
+    color: #4F39F6;
+}
+
+.btn.btn-sm.btn-outline-primary:hover {
+    background: #4F39F6;
+    border-color: #4F39F6 !important;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(79,57,246,0.28);
+}
+
+.btn.btn-sm.btn-outline-danger {
+    background: #FFF1F1;
+    border-color: #FECACA !important;
+    color: #EF4444;
+}
+
+.btn.btn-sm.btn-outline-danger:hover {
+    background: #EF4444;
+    border-color: #EF4444 !important;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(239,68,68,0.28);
+}
+
+/* Pagination footer */
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: #F7F8FC;
+    border-top: 1px solid #E8EBF3;
+}
+
+.table-footer-info {
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+.page-link {
+    border-radius: 8px !important;
+    font-size: 12px;
+    font-weight: 600;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.15s;
+}
+
+.page-item.active .page-link {
+    background: #4F39F6 !important;
+    border-color: #4F39F6 !important;
+}
+
+.page-item:not(.active) .page-link {
+    color: #64748B;
+    border-color: #E2E8F0 !important;
+    background: #fff;
+}
+
+.page-item:not(.active) .page-link:hover {
+    background: #EEF2FF;
+    color: #4F39F6;
+    border-color: #C7D2FE !important;
 }

@@ -13,7 +13,7 @@
 <body>
 
 <div class="d-flex min-vh-100 layout-wrapper">
-    {{-- SIDEBAR (tidak diubah) --}}
+    {{-- ========== SIDEBAR (tidak diubah) ========== --}}
     <aside class="sidebar d-flex flex-column">
         <div class="sidebar-brand d-flex align-items-center gap-3 mb-5">
             <img src="{{ asset('assets/Logo - SIVENTUS.png') }}" alt="Logo SIVENTUS" class="brand-logo">
@@ -59,14 +59,14 @@
             </form>
         </div>
     </aside>
+    {{-- ========== END SIDEBAR ========== --}}
 
-    {{-- KONTEN UTAMA --}}
     <main class="content-area flex-grow-1">
 
         {{-- Welcome Banner --}}
         <div class="welcome-banner d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h4 class="fw-bold mb-1 text-white">Kelola Event</h4>
+                <h4 class="fw-bold mb-1">Kelola Event</h4>
                 <p class="mb-0 text-white-50">Manajemen seluruh event yang ada di sistem</p>
             </div>
             <button class="btn btn-tambah-top" id="btn-tambah-event">
@@ -74,19 +74,42 @@
             </button>
         </div>
 
-        {{-- Filter & Search Bar --}}
-        <div class="filter-bar mb-3">
-            <div class="position-relative flex-grow-1" style="max-width: 360px;">
-                <i class="bi bi-search position-absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: #A0AEC0; font-size: 14px;"></i>
-                <input type="text" class="form-control" style="padding-left: 40px; border-radius: 10px; border: 1.5px solid #E2E8F0; font-size: 14px;" placeholder="Cari nama event...">
+        {{-- Stat Cards --}}
+        <div class="stats-row mb-4">
+            <div class="stat-card card-total">
+                <div class="stat-icon"><i class="bi bi-calendar-event"></i></div>
+                <div class="stat-label">Total Event</div>
+                <div class="stat-value">{{ $totalEvent ?? 24 }}</div>
+                <div class="stat-sub">Sepanjang tahun ini</div>
             </div>
-            <select class="form-select" style="width: auto; border-radius: 10px; border: 1.5px solid #E2E8F0; font-size: 14px; padding: 9px 36px 9px 14px; color: #4A5568;">
+            <div class="stat-card card-aktif">
+                <div class="stat-icon"><i class="bi bi-play-circle"></i></div>
+                <div class="stat-label">Aktif Sekarang</div>
+                <div class="stat-value">{{ $eventAktif ?? 8 }}</div>
+                <div class="stat-sub">Sedang berlangsung</div>
+            </div>
+            <div class="stat-card card-datang">
+                <div class="stat-icon"><i class="bi bi-clock"></i></div>
+                <div class="stat-label">Akan Datang</div>
+                <div class="stat-value">{{ $eventMendatang ?? 6 }}</div>
+                <div class="stat-sub">Dalam 30 hari ke depan</div>
+            </div>
+        </div>
+
+        {{-- Filter & Search --}}
+        <div class="filter-bar mb-3">
+            <div class="input-search-wrapper">
+                <i class="bi bi-search"></i>
+                <input type="text" class="form-control" placeholder="Cari nama event...">
+            </div>
+            <select class="form-select">
                 <option value="">Semua Kategori</option>
                 <option value="seminar">Seminar</option>
                 <option value="workshop">Workshop</option>
                 <option value="kompetisi">Kompetisi</option>
+                <option value="talkshow">Talkshow</option>
             </select>
-            <select class="form-select" style="width: auto; border-radius: 10px; border: 1.5px solid #E2E8F0; font-size: 14px; padding: 9px 36px 9px 14px; color: #4A5568;">
+            <select class="form-select">
                 <option value="">Semua Status</option>
                 <option value="aktif">Aktif</option>
                 <option value="selesai">Selesai</option>
@@ -94,42 +117,49 @@
             </select>
         </div>
 
-        {{-- Tabel Data Event --}}
-        <div class="data-card bg-white">
+        {{-- Tabel Event --}}
+        <div class="data-card bg-white rounded-3 shadow-sm">
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
                     <thead>
                         <tr>
-                            <th style="width: 50px;">No</th>
+                            <th>No</th>
                             <th>Nama Event</th>
                             <th>Tanggal</th>
                             <th>Kategori</th>
                             <th>Status</th>
-                            <th style="width: 110px;">Aksi</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @forelse($events ?? [] as $index => $event)
                         <tr>
-                            <td class="text-muted fw-semibold" style="font-size:13px;">01</td>
+                            <td class="row-num">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</td>
                             <td>
-                                <div class="event-name-cell">
-                                    <div class="event-icon">
+                                <div class="event-cell">
+                                    <div class="event-icon-box">
                                         <i class="bi bi-calendar-event"></i>
                                     </div>
                                     <div>
-                                        <div class="event-title">Seminar Teknologi 2026</div>
-                                        <div class="event-subtitle">Aula Gedung A · 250 peserta</div>
+                                        <div class="event-title">{{ $event->nama }}</div>
+                                        <div class="event-meta">{{ $event->lokasi }} · {{ $event->kuota }} peserta</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <div style="font-size: 14px; font-weight: 500; color: #2D3748;">12 Mei 2026</div>
-                                <div style="font-size: 12px; color: #A0AEC0;">09.00 – 16.00 WIB</div>
+                                <div class="date-primary">{{ \Carbon\Carbon::parse($event->tanggal)->isoFormat('D MMM YYYY') }}</div>
+                                <div class="date-secondary">{{ $event->waktu_mulai }} – {{ $event->waktu_selesai }}</div>
                             </td>
-                            <td><span class="kategori-chip">Seminar</span></td>
-                            <td><span class="badge bg-success">Aktif</span></td>
                             <td>
-                                <div class="btn-action-group">
+                                <span class="kategori-chip chip-{{ strtolower($event->kategori) }}">{{ $event->kategori }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ $event->status === 'Aktif' ? 'success' : ($event->status === 'Draft' ? 'warning' : 'secondary') }}">
+                                    {{ $event->status }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-action-wrap">
                                     <button class="btn btn-sm btn-outline-primary btn-edit" title="Edit Event">
                                         <i class="bi bi-pencil"></i>
                                     </button>
@@ -139,27 +169,74 @@
                                 </div>
                             </td>
                         </tr>
-                        {{-- Tambah baris data di sini --}}
+                        @empty
+                        {{-- Baris contoh (hapus saat data sudah dari database) --}}
+                        <tr>
+                            <td class="row-num">01</td>
+                            <td>
+                                <div class="event-cell">
+                                    <div class="event-icon-box">
+                                        <i class="bi bi-calendar-event"></i>
+                                    </div>
+                                    <div>
+                                        <div class="event-title">Seminar Teknologi 2026</div>
+                                        <div class="event-meta">Aula Gedung A · 250 peserta</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="date-primary">12 Mei 2026</div>
+                                <div class="date-secondary">09.00 – 16.00 WIB</div>
+                            </td>
+                            <td><span class="kategori-chip chip-seminar">Seminar</span></td>
+                            <td><span class="badge bg-success">Aktif</span></td>
+                            <td>
+                                <div class="btn-action-wrap">
+                                    <button class="btn btn-sm btn-outline-primary btn-edit" title="Edit Event">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger btn-delete" title="Hapus Event">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
 
-            {{-- Pagination Footer --}}
-            <div class="pagination-wrapper">
-                <span class="pagination-info">Menampilkan 1–1 dari 1 event</span>
+            {{-- Footer Tabel --}}
+            <div class="table-footer">
+                <span class="table-footer-info">
+                    Menampilkan {{ isset($events) ? $events->firstItem() . '–' . $events->lastItem() : '1–1' }}
+                    dari {{ isset($events) ? $events->total() : '1' }} event
+                </span>
+                @if(isset($events) && $events->hasPages())
                 <nav>
-                    <ul class="pagination pagination-sm mb-0" style="gap: 4px;">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" style="border-radius: 8px; border-color: #E2E8F0; color: #A0AEC0;">&laquo;</a>
+                    <ul class="pagination pagination-sm mb-0 gap-1">
+                        <li class="page-item {{ $events->onFirstPage() ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $events->previousPageUrl() }}">‹</a>
                         </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#" style="border-radius: 8px; background: #4F39F6; border-color: #4F39F6;">1</a>
+                        @foreach($events->getUrlRange(1, $events->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page === $events->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
                         </li>
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" style="border-radius: 8px; border-color: #E2E8F0; color: #A0AEC0;">&raquo;</a>
+                        @endforeach
+                        <li class="page-item {{ $events->onLastPage() ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $events->nextPageUrl() }}">›</a>
                         </li>
                     </ul>
                 </nav>
+                @else
+                <nav>
+                    <ul class="pagination pagination-sm mb-0 gap-1">
+                        <li class="page-item disabled"><a class="page-link" href="#">‹</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#">›</a></li>
+                    </ul>
+                </nav>
+                @endif
             </div>
         </div>
 

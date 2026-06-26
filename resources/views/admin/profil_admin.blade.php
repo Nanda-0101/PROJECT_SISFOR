@@ -13,6 +13,7 @@
 <body>
 
 <div class="d-flex min-vh-100 layout-wrapper">
+    {{-- ========== SIDEBAR (tidak diubah) ========== --}}
     <aside class="sidebar d-flex flex-column">
         <div class="sidebar-brand d-flex align-items-center gap-3 mb-5">
             <img src="{{ asset('assets/Logo - SIVENTUS.png') }}" alt="Logo SIVENTUS" class="brand-logo">
@@ -58,8 +59,11 @@
             </form>
         </div>
     </aside>
+    {{-- ========== END SIDEBAR ========== --}}
 
     <main class="content-area flex-grow-1">
+
+        {{-- Welcome Banner --}}
         <div class="welcome-banner d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h4 class="fw-bold mb-1">Profil Admin</h4>
@@ -67,32 +71,171 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row g-4">
+
+            {{-- Kolom Kiri: Form --}}
             <div class="col-md-8">
-                <div class="form-card bg-white p-4 rounded-3 shadow-sm border border-light">
-                    <form id="form-profil">
-                        @csrf
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Nama Lengkap</label>
-                            <input type="text" class="form-control custom-input" name="name" value="Admin Utama" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Email</label>
-                            <input type="email" class="form-control custom-input" name="email" value="admin@siventus.com" required>
-                        </div>
-                        <hr class="my-4">
-                        <h6 class="fw-bold mb-3">Ubah Password (Opsional)</h6>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Password Baru</label>
-                            <input type="password" class="form-control custom-input" name="password" placeholder="Masukkan password baru">
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 btn-simpan">Simpan Perubahan</button>
-                    </form>
+
+                {{-- Avatar & Info Singkat --}}
+                <div class="profile-header-card mb-4">
+                    <div class="profile-avatar">
+                        {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}{{ strtoupper(substr(strstr(auth()->user()->name ?? 'Admin', ' '), 1, 1)) }}
+                    </div>
+                    <div>
+                        <div class="profile-info-name">{{ auth()->user()->name ?? 'Admin Utama' }}</div>
+                        <div class="profile-info-role">Administrator</div>
+                        <div class="profile-info-email">{{ auth()->user()->email ?? 'admin@siventus.com' }}</div>
+                    </div>
+                </div>
+
+                {{-- Form Edit Profil --}}
+                <div class="form-card bg-white rounded-3 shadow-sm border border-light">
+                    <div class="form-card-body">
+                            @csrf
+                            @method('PUT')
+
+                            {{-- Nama Lengkap --}}
+                            <div class="mb-3">
+                                <label class="form-label">Nama Lengkap</label>
+                                <div class="input-icon-wrapper">
+                                    <i class="bi bi-person input-icon"></i>
+                                    <input type="text"
+                                           class="form-control custom-input @error('name') is-invalid @enderror"
+                                           name="name"
+                                           value="{{ old('name', auth()->user()->name ?? 'Admin Utama') }}"
+                                           placeholder="Masukkan nama lengkap"
+                                           required>
+                                </div>
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Email --}}
+                            <div class="mb-3">
+                                <label class="form-label">Alamat Email</label>
+                                <div class="input-icon-wrapper">
+                                    <i class="bi bi-envelope input-icon"></i>
+                                    <input type="email"
+                                           class="form-control custom-input @error('email') is-invalid @enderror"
+                                           name="email"
+                                           value="{{ old('email', auth()->user()->email ?? 'admin@siventus.com') }}"
+                                           placeholder="Masukkan alamat email"
+                                           required>
+                                </div>
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Divider --}}
+                            <div class="form-section-label">
+                                <span>Ubah Password</span>
+                            </div>
+
+                            {{-- Password Baru --}}
+                            <div class="mb-3">
+                                <label class="form-label">Password Baru <span style="color:#94A3B8; font-weight:400;">(opsional)</span></label>
+                                <div class="input-password-wrapper">
+                                    <input type="password"
+                                           class="form-control custom-input @error('password') is-invalid @enderror"
+                                           name="password"
+                                           id="inputPassword"
+                                           placeholder="Buat password baru">
+                                    <button type="button" class="btn-toggle-pass" onclick="togglePassword('inputPassword', this)">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
+                                <div class="input-hint">
+                                    <i class="bi bi-info-circle" style="font-size:12px;"></i>
+                                    Minimal 8 karakter. Kosongkan jika tidak ingin mengubah.
+                                </div>
+                                @error('password')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- Konfirmasi Password --}}
+                            <div class="mb-4">
+                                <label class="form-label">Konfirmasi Password Baru</label>
+                                <div class="input-password-wrapper">
+                                    <input type="password"
+                                           class="form-control custom-input"
+                                           name="password_confirmation"
+                                           id="inputPasswordConfirm"
+                                           placeholder="Ulangi password baru">
+                                    <button type="button" class="btn-toggle-pass" onclick="togglePassword('inputPasswordConfirm', this)">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-simpan">
+                                <i class="bi bi-check-lg me-2"></i> Simpan Perubahan
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
+
+            {{-- Kolom Kanan: Info Akun --}}
+            <div class="col-md-4">
+                <div class="info-side-card">
+                    <div class="info-side-title">Info Akun</div>
+
+                    <div class="info-side-item">
+                        <div class="info-side-icon"><i class="bi bi-shield-check"></i></div>
+                        <div>
+                            <div class="info-side-label">Role</div>
+                            <div class="info-side-value">Administrator</div>
+                        </div>
+                    </div>
+
+                    <div class="info-side-item">
+                        <div class="info-side-icon"><i class="bi bi-calendar-check"></i></div>
+                        <div>
+                            <div class="info-side-label">Bergabung</div>
+                            <div class="info-side-value">
+                                {{ isset(auth()->user()->created_at) ? auth()->user()->created_at->isoFormat('D MMMM YYYY') : '1 Januari 2025' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-side-item">
+                        <div class="info-side-icon"><i class="bi bi-clock-history"></i></div>
+                        <div>
+                            <div class="info-side-label">Login Terakhir</div>
+                            <div class="info-side-value">Hari ini</div>
+                        </div>
+                    </div>
+
+                    <div class="info-side-item">
+                        <div class="info-side-icon"><i class="bi bi-toggle-on"></i></div>
+                        <div>
+                            <div class="info-side-label">Status Akun</div>
+                            <div class="info-side-value" style="color:#059669;">Aktif</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 </div>
+
+<script>
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon  = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('bi-eye-slash', 'bi-eye');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('bi-eye', 'bi-eye-slash');
+    }
+}
+</script>
 
 </body>
 </html>

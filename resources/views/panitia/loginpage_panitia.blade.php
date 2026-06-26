@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIVENPUS - Mahasiswa</title>
+    <title>SIVENPUS - Panitia</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -30,12 +30,10 @@
                     <img src="{{ asset('assets/Logo - Unud.png') }}" alt="Logo Unud" class="brand-logo">
                     <img src="{{ asset('assets/Logo - Informatika.png') }}" alt="Logo Informatika" class="brand-logo">
                 </div>
-                <h3 class="brand-title">SIVENPUS</h3>
+                <h3 class="brand-title">SIVENPUS - PANITIA</h3>
 
                 <h5 class="welcome-text mt-4">Selamat Datang!</h5>
 
-                <p class="info-text">
-                    Belum punya akun? <span class="fw-bold">Daftar Disini.</span>
                 </p>
 
                 <form method="POST" action="{{ url('/login') }}">
@@ -80,11 +78,6 @@
                 <div class="forgot-box">
                     <p class="forgot-text">Lupa kata sandi? <a href="#" class="click-here">Klik disini</a></p>
                 </div>
-
-                <p class="admin-text">
-                    Anda adalah admin? 
-                    <a href="{{ url('/login-admin') }}" class="toggle" style="text-decoration: none;">
-                        Login disini
                     </a>
                 </p>
 
@@ -95,4 +88,4 @@
 </div>
 
 </body>
-</html>
+</html> 

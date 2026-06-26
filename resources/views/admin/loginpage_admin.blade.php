@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIVENPUS - ADMIN</title>
+    <title>SIVENPUS - Login Admin</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     @vite(['resources/css/login.css'])
 </head>
 <body>
@@ -14,85 +15,141 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="col-md-6 left-section" style="background-image: url('{{ asset('assets/Landing Page .png') }}');">
+        <!-- Left -->
+        <div class="col-md-6 left-section"
+             style="background-image: url('{{ asset('assets/Landing Page .png') }}');">
+
             <div class="content-left">
-                <h2 id="title">Halo<br><span style="white-space: nowrap;">Admin 👋</span></h2>
+                <h2 id="title">
+                    Halo<br>
+                    <span style="white-space: nowrap;">Admin 👋</span>
+                </h2>
+
                 <p id="desc">
-                    SIVENPUS adalah
+                    Selamat datang di Sistem Informasi Event Universitas (SIVENPUS).
                 </p>
             </div>
+
         </div>
 
+        <!-- Right -->
         <div class="col-md-6 right-section">
+
             <div class="login-box">
 
                 <div class="logo-container mb-2">
-                    <img src="{{ asset('assets/Logo - Unud.png') }}" alt="Logo Unud" class="brand-logo">
-                    <img src="{{ asset('assets/Logo - Informatika.png') }}" alt="Logo Informatika" class="brand-logo">
+                    <img src="{{ asset('assets/Logo - Unud.png') }}" class="brand-logo" alt="Logo Unud">
+                    <img src="{{ asset('assets/Logo - Informatika.png') }}" class="brand-logo" alt="Logo Informatika">
                 </div>
-                <h3 class="brand-title">SIVENPUS</h3>
 
-                <h5 class="welcome-text mt-4">Selamat Datang!</h5>
+                <h3 class="brand-title">
+                    SIVENPUS
+                </h3>
+
+                <h5 class="welcome-text mt-4">
+                    Selamat Datang!
+                </h5>
 
                 <p class="info-text">
-                    Belum punya akun? <span class="fw-bold">Daftar Disini.</span>
+                    Silakan login menggunakan akun Admin.
                 </p>
 
-                <form method="POST" action="{{ url('/login') }}">
-                    @csrf 
-                    @if ($errors->any())
-                        <div class="alert alert-danger mb-3 py-2" role="alert" style="font-size: 13px;">
-                            <ul class="mb-0 list-unstyled">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                {{-- Alert Error --}}
+                @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert">
+                        </button>
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+                        @foreach($errors->all() as $error)
+                            <div>{{ $error }}</div>
+                        @endforeach
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert">
+                        </button>
+
+                    </div>
+                @endif
+
+                <form action="{{ url('/admin-login') }}" method="POST">
+
+                    @csrf
 
                     <div class="mb-3">
+
                         <input
                             type="text"
                             class="form-control"
-                            name="Username"
+                            name="username"
                             placeholder="Username"
-                            required
-                        >
+                            value="{{ old('username') }}"
+                            required>
+
                     </div>
 
                     <div class="mb-3">
+
                         <input
-                            type="Password"
+                            type="password"
                             class="form-control"
-                            name="Password"
+                            name="password"
                             placeholder="Password"
-                            required
-                        >
+                            required>
+
                     </div>
 
-                    <input type="hidden" name="role" value="mahasiswa">
+                    <button
+                        type="submit"
+                        class="btn btn-login w-100">
 
-                    <button type="submit" class="btn btn-login mt-2">
                         Login
+
                     </button>
+
                 </form>
 
-                <div class="forgot-box">
-                    <p class="forgot-text">Lupa kata sandi? <a href="#" class="click-here">Klik disini</a></p>
+                <div class="forgot-box mt-3">
+
+                    <p class="forgot-text">
+                        Lupa kata sandi?
+                        <a href="#" class="click-here">
+                            Klik di sini
+                        </a>
+                    </p>
+
                 </div>
 
                 <p class="admin-text">
-                    Anda adalah Panitia? 
-                    <a href="{{ url('/login-admin') }}" class="toggle" style="text-decoration: none;">
-                        Login disini
+
+                    Anda adalah Panitia?
+
+                    <a href="{{ url('/panitia-login') }}"
+                       class="toggle text-decoration-none">
+
+                        Login di sini
+
                     </a>
+
                 </p>
 
             </div>
+
         </div>
 
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

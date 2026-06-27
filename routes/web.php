@@ -37,3 +37,7 @@ Route::get('/admin-profiladmin', function () {
 Route::get('/admin-loginpageadmin', function () {
     return view('admin.loginpage_admin'); 
 });
+
+Route::get('/panitia-penutupansesipanitia', function () {
+    return view('panitia.tutupSesi_panitia'); 
+});

@@ -1,0 +1,446 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F4F6F9;
+    overflow-x: hidden;
+    margin: 0;
+}
+
+.layout-wrapper {
+    background-color: #F4F6F9;
+}
+
+.sidebar {
+    width: 320px;
+    min-width: 320px;
+    background-color: #05060F;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 25px;
+    color: white;
+    min-height: 100vh;
+}
+
+.brand-logo {
+    width: 51px;
+    height: 51px;
+    object-fit: contain;
+    background: #4F39F6;
+    padding: 5px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.brand-text .fw-bold {
+    font-size: 16px;
+    color: white;
+    line-height: 1.3;
+}
+
+.brand-text p {
+    font-size: 12px;
+    color: #A0AEC0;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Base Tombol Split */
+.menu-item {
+    display: flex;
+    align-items: stretch;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 57, 246, 0.2);
+    color: white;
+}
+
+.menu-icon-wrapper {
+    background-color: #4F39F6;
+    width: 50px;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-icon {
+    width: 20px;
+    height: auto;
+}
+
+.menu-text-wrapper {
+    background-color: rgba(79, 57, 246, 0.66);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    flex: 1;
+    padding: 14px 15px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.menu-item.active .menu-icon-wrapper {
+    background-color: #262053;
+}
+
+.menu-item.active .menu-text-wrapper {
+    background-color: rgba(38, 32, 83, 0.66);
+    color: #E2E8F0;
+}
+
+.btn-logout-sidebar {
+    background-color: #111424;
+    color: #FFFFFF;
+    border: 1px solid #1E233D;
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-logout-sidebar:hover {
+    background-color: #1A1F38;
+    border-color: #4A3BCE;
+}
+
+.content-area {
+    padding: 40px;
+    min-width: 0;
+}
+
+.welcome-banner {
+    background: linear-gradient(135deg, #2E228B 0%, #4634BE 100%);
+    border-radius: 12px;
+    padding: 25px 30px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.btn-logout-top {
+    background-color: #D32F2F;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 30px;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.btn-logout-top:hover {
+    background-color: #B71C1C;
+    color: white;
+}
+
+.tutup-sesi-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #EEF0F5;
+}
+
+/* Lock Icon Header */
+.lock-icon-wrapper {
+    width: 72px;
+    height: 72px;
+    background: #FEE2E2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #DC2626;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+}
+
+.tutup-sesi-title {
+    font-size: 22px;
+    color: #1A1A2E;
+    letter-spacing: 0.3px;
+}
+
+.tutup-sesi-subtitle {
+    color: #64748B;
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Label */
+.tutup-sesi-label {
+    color: #1A1A2E;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Dropdown Select */
+.sesi-event-select {
+    border: 1.5px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1A1A2E;
+    background-color: #FFFFFF;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    appearance: auto;
+}
+
+.sesi-event-select:focus {
+    border-color: #4F39F6;
+    box-shadow: 0 0 0 3px rgba(79, 57, 246, 0.12);
+    outline: none;
+}
+
+.sesi-card {
+    background: #FFFFFF;
+    border: 1.5px solid #E8ECF4;
+    border-radius: 12px;
+    padding: 22px;
+    height: 100%;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.sesi-card:hover {
+    box-shadow: 0 6px 20px rgba(79, 57, 246, 0.1);
+    border-color: #C5BFF8;
+    transform: translateY(-3px);
+}
+
+.sesi-card-closed {
+    background: #FAFBFC;
+    border-color: #DDE3EC;
+    opacity: 0.82;
+}
+
+.sesi-card-closed:hover {
+    box-shadow: none;
+    border-color: #DDE3EC;
+    transform: none;
+}
+
+.sesi-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1A1A2E;
+    margin-bottom: 5px;
+}
+
+.sesi-info {
+    font-size: 13px;
+    color: #64748B;
+    margin-bottom: 14px;
+    font-weight: 400;
+}
+
+/* Status Badge */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.badge-buka {
+    background: #DCFCE7;
+    color: #16A34A;
+}
+
+.badge-tutup {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.dot-buka {
+    background: #16A34A;
+    box-shadow: 0 0 4px rgba(22, 163, 74, 0.5);
+}
+
+.dot-tutup {
+    background: #DC2626;
+    box-shadow: 0 0 4px rgba(220, 38, 38, 0.5);
+}
+
+/* Tombol Tutup Sesi Ini */
+.btn-tutup-sesi {
+    background: #DC2626;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-tutup-sesi:hover {
+    background: #B91C1C;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.btn-tutup-sesi:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Tombol Sudah Ditutup */
+.btn-sudah-ditutup {
+    background: #E9ECEF;
+    color: #9CA3AF;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: not-allowed;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.empty-state-icon {
+    font-size: 3.5rem;
+    color: #CBD5E1;
+    display: block;
+}
+
+.confirm-modal-content {
+    border-radius: 18px;
+    border: none;
+    overflow: hidden;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-icon-wrapper {
+    width: 68px;
+    height: 68px;
+    background: #FEF9C3;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #D97706;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+}
+
+.modal-sesi-nama-text {
+    font-size: 16px;
+    color: #1A1A2E;
+}
+
+.btn-cancel-modal {
+    background: #F1F5F9;
+    color: #475569;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 9px;
+    padding: 10px 22px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-cancel-modal:hover {
+    background: #E2E8F0;
+    border-color: #CBD5E1;
+}
+
+.btn-confirm-modal {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 10px 22px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+
+.btn-confirm-modal:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn-confirm-modal:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#successToast {
+    background: #1E293B;
+    color: white;
+    border-radius: 12px;
+    min-width: 280px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+#successToast .toast-body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none !important;
+    }
+
+    .content-area {
+        padding: 20px 16px;
+    }
+
+    .tutup-sesi-card {
+        padding: 24px 20px;
+    }
+
+    .welcome-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px;
+    }
+}

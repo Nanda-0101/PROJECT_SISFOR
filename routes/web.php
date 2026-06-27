@@ -49,3 +49,7 @@ Route::get('/admin-kelolapanitia', function () {
 Route::get('/admin-profiladmin', function () {
     return view('admin.profil_admin'); 
 });
+
+Route::get('/panitia-data-peserta', function () {
+    return view('panitia.dataPeserta_panitia');
+});

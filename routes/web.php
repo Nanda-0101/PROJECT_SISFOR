@@ -11,7 +11,15 @@ Route::get('/panitia-dashboard', function () {
 });
 
 Route::get('/panitia-data-peserta', function () {
-    return view('panitia.dataPeserta_panitia');
+    return view('panitia.dataPeserta_panitia', [
+        'totalPeserta' => 0,
+        'totalEvent'   => 0,
+        'totalSesi'    => 0,
+        'sesiPenuh'    => 0,
+        'peserta'      => collect([]),
+        'events'       => collect([]),
+        'sesiList'     => collect([]),
+    ]);
 });
 
 Route::get('/panitia-profil', function () {
@@ -50,6 +58,6 @@ Route::get('/admin-profiladmin', function () {
     return view('admin.profil_admin'); 
 });
 
-Route::get('/panitia-data-peserta', function () {
-    return view('panitia.dataPeserta_panitia');
+Route::get('/tutupsesi-panitia', function () {
+    return view('panitia.tutupSesi_panitia'); 
 });

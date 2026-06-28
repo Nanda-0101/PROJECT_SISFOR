@@ -24,7 +24,6 @@
         <ul class="menu">
             <li class="active">📊 Dashboard</li>
             <li>👥 Data Peserta</li>
-            <li>📁 Export Data</li>
             <li>🔒 Tutup Sesi</li>
             <li>⚙️ Profil Panitia</li>
         </ul>

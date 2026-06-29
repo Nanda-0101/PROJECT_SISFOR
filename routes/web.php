@@ -61,3 +61,7 @@ Route::get('/admin-profiladmin', function () {
 Route::get('/tutupsesi-panitia', function () {
     return view('panitia.tutupSesi_panitia'); 
 });
+
+Route::get('/pendaftaran-peserta', function () {
+    return view('public.pendaftaranPeserta_public'); 
+});

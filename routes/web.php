@@ -13,6 +13,14 @@ Route::get('/public-landingpage', function () {
     return view('public.landingpage_public');
 });
 
+Route::get('/pendaftaran-peserta', function () {
+    return view('public.pendaftaranPeserta_public'); 
+});
+
+Route::get('/cekstatuspendaftaran-peserta', function () {
+    return view('public.cekStatusPendaftaran_public'); 
+});
+
 /*
 |--------------------------------------------------------------------------
 | Login Admin
@@ -82,13 +90,26 @@ Route::get('/panitia-dashboard', function () {
 });
 
 Route::get('/panitia-data-peserta', function () {
-    return view('panitia.dataPeserta_panitia');
+    return view('panitia.dataPeserta_panitia', [
+        'totalPeserta' => 0,
+        'totalEvent'   => 0,
+        'totalSesi'    => 0,
+        'sesiPenuh'    => 0,
+        'peserta'      => collect([]),
+        'events'       => collect([]),
+        'sesiList'     => collect([]),
+    ]);
 });
 
 Route::get('/panitia-profil', function () {
     return view('panitia.profil_panitia');
 });
 
+// Menggunakan penamaan route panitia yang konsisten
 Route::get('/panitia-tutup-sesi', function () {
     return view('panitia.tutupSesi_panitia');
+});
+
+Route::get('/tutupsesi-panitia', function () {
+    return view('panitia.tutupSesi_panitia'); 
 });

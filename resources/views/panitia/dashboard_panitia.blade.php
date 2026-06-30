@@ -3,82 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIVENPUS - Dashboard Panitia</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('build/assets/dashPanitia-CcmZzLND.css') }}">
-    <script type="module" src="{{ asset('build/assets/app-DMRtMKZ6.js') }}"></script>
+    <title>Dashboard Panitia</title>
+
+    @vite(['resources/css/dashPanitia.css'])
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="dashboard-wrapper">
-        <aside class="sidebar">
-            <div class="brand">
-                <div class="brand-icon">S</div>
-                <div>
-                    <p class="brand-label">Sistem Event Kampus</p>
-                    <p class="brand-subtitle">Multi Event & Sharing Session</p>
-                </div>
+
+<div class="wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>PANITIA</h2>
+            <p>Sistem Event Kampus</p>
+        </div>
+
+        <ul class="menu">
+            <li class="active">📊 Dashboard</li>
+            <li>👥 Data Peserta</li>
+            <li>📁 Export Data</li>
+            <li>🔒 Tutup Sesi</li>
+            <li>⚙️ Profil Panitia</li>
+        </ul>
+
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <div class="header-box">
+
+            <div>
+                <span class="badge">
+                    PANITIA LEVEL
+                </span>
+
+                <h1>Dashboard Pemantauan Multi Event</h1>
+
+                <p>
+                    Monitoring seluruh data pendaftaran event kampus
+                </p>
             </div>
 
-            <nav class="sidebar-nav">
-                <a href="/panitia-dashboard" class="nav-item active">
-                    <span class="nav-icon">📊</span>
-                    <span>Dashboard Panitia</span>
-                </a>
-                <a href="/panitia-data-peserta" class="nav-item">
-                    <span class="nav-icon">👥</span>
-                    <span>Data Peserta</span>
-                </a>
-                <a href="/panitia-tutup-sesi" class="nav-item">
-                    <span class="nav-icon">🔒</span>
-                    <span>Tutup Sesi Manual</span>
-                </a>
-                <a href="/panitia-profil" class="nav-item">
-                    <span class="nav-icon">👤</span>
-                    <span>Profil Panitia</span>
-                </a>
-            </nav>
+            <div class="date-box">
+                {{ now()->format('d M Y') }}
+            </div>
 
-            <a href="/panitia-login" class="logout-button">Log Out</a>
-        </aside>
+        </div>
 
-        <main class="main-panel">
-            <header class="header-card">
-                <div>
-                    <p class="header-label">Selamat Datang di Dashboard Panitia</p>
-                    <p class="header-description">Lakukan Pemantauan pada Multi Event Disini!</p>
+        <!-- CARD -->
+        <div class="cards">
+
+            <div class="card">
+                <p>Total Pendaftar</p>
+                <h2 class="indigo">150</h2>
+            </div>
+
+            <div class="card">
+                <p>Sesi Aktif</p>
+                <h2 class="green">4</h2>
+            </div>
+
+            <div class="card">
+                <p>Total Event</p>
+                <h2 class="blue">8</h2>
+            </div>
+
+            <div class="card">
+                <p>Sesi Penuh</p>
+                <h2 class="red">2</h2>
+            </div>
+
+        </div>
+
+        <!-- CHART -->
+        <div class="chart-box">
+
+            <h3>Grafik Jumlah Pendaftar</h3>
+
+            <canvas id="chartPendaftar"></canvas>
+
+        </div>
+
+        <!-- REKAP EVENT -->
+        <div class="rekap-box">
+
+            <h3>Rekap Per Event</h3>
+
+            <div class="event-item">
+
+                <div class="event-header">
+                    <span>Grand Tech Annual Fest 2026</span>
+                    <strong>80 / 100</strong>
                 </div>
-                <a href="/panitia-login" class="header-logout">Logout</a>
-            </header>
 
-            <section class="stats-grid">
-                <article class="stat-card card-primary">
-                    <p class="stat-value">100</p>
-                    <p class="stat-name">Mahasiswa</p>
-                    <p class="stat-note">Total Pendaftar<br>Ini merupakan total dari pendaftar event pada saat ini.</p>
-                </article>
-                <article class="stat-card card-secondary">
-                    <p class="stat-value">50</p>
-                    <p class="stat-name">Sesi</p>
-                    <p class="stat-note">Sesi Aktif Terbuka<br>Ini merupakan total dari sesi event terbuka pada saat ini.</p>
-                </article>
-            </section>
-
-            <section class="recap-card">
-                <div class="recap-header">Rekap Per Event</div>
-                <div class="recap-list">
-                    <div class="recap-item">
-                        <span>Grand Tech Annual Fest 2026</span>
-                        <span>180 Pendaftar</span>
-                    </div>
-                    <div class="recap-item">
-                        <span>Workshop Kreativitas Digital</span>
-                        <span>190 Pendaftar</span>
-                    </div>
+                <div class="progress">
+                    <div class="progress-bar" style="width:80%"></div>
                 </div>
-            </section>
-        </main>
-    </div>
+
+            </div>
+
+            <div class="event-item">
+
+                <div class="event-header">
+                    <span>Workshop Kreativitas Digital</span>
+                    <strong>45 / 60</strong>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar green-bar" style="width:75%"></div>
+                </div>
+
+            </div>
+
+            <div class="event-item">
+
+                <div class="event-header">
+                    <span>Seminar Artificial Intelligence</span>
+                    <strong>65 / 100</strong>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar blue-bar" style="width:65%"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-box">
+
+            <div class="table-header">
+
+                <h3>Pendaftaran Terbaru</h3>
+
+                <button class="export-btn">
+                    Export Excel
+                </button>
+
+            </div>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>NIM</th>
+                        <th>Nama</th>
+                        <th>Event</th>
+                        <th>Sesi</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>2201010043</td>
+                        <td>I Putu Nanda Aditya</td>
+                        <td>Tech Fest</td>
+                        <td>Sesi Pagi</td>
+                        <td>
+                            <span class="status">
+                                Terdaftar
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2201010050</td>
+                        <td>Ni Made Ayu Pratiwi</td>
+                        <td>Workshop Digital</td>
+                        <td>Sesi Siang</td>
+                        <td>
+                            <span class="status">
+                                Terdaftar
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2201010060</td>
+                        <td>Kadek Dwi</td>
+                        <td>Seminar AI</td>
+                        <td>Sesi 2</td>
+                        <td>
+                            <span class="status">
+                                Terdaftar
+                            </span>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+const ctx = document.getElementById('chartPendaftar');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [
+            'Tech Fest',
+            'Workshop',
+            'Seminar AI',
+            'UI UX Camp'
+        ],
+        datasets: [{
+            label: 'Jumlah Pendaftar',
+            data: [80,45,65,90]
+        }]
+    }
+});
+
+</script>
+
 </body>
 </html>

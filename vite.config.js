@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/css/dashPanitia.css',
                 'resources/js/app.js',
+                'resources/css/data_peserta.css'
             ],
             refresh: true,
         }),

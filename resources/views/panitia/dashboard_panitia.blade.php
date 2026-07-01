@@ -60,7 +60,7 @@
             <li>
                 <a href="{{ route('panitia.tutup.sesi') }}" class="menu-item">
                     <span class="menu-icon-wrapper"><i class="bi bi-lock menu-icon"></i></span>
-                    <span class="menu-text">Tutup Sesi</span>
+                    <span class="menu-text">Kelola Sesi</span>
                 </a>
             </li>
             <li>

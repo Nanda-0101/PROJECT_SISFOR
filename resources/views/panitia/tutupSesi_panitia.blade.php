@@ -43,7 +43,7 @@
             <li>
                 <a href="{{ route('panitia.tutup.sesi') }}" class="menu-item active">
                     <span class="menu-icon-wrapper"><i class="bi bi-lock menu-icon"></i></span>
-                    <span class="menu-text">Tutup Sesi</span>
+                    <span class="menu-text">Kelola Sesi</span>
                 </a>
             </li>
             <li>
@@ -63,9 +63,9 @@
         <div class="header-box">
 
             <div>
-                <span class="badge">TUTUP SESI</span>
+                <span class="badge">KELOLA SESI</span>
 
-                <h1>Kelola Sesi Event</h1>
+                <h1>Daftar Sesi Event</h1>
 
                 <p>
                     Menutup sesi apabila kuota peserta telah terpenuhi.
@@ -95,7 +95,7 @@
         <div class="table-box">
 
             <div class="table-header">
-                <h3>Daftar Sesi Event</h3>
+                <h3>List Sesi Event</h3>
             </div>
 
             @forelse($sesis as $sesi)

@@ -7,8 +7,7 @@
 
     @vite([
         'resources/css/pendaftaranpeserta.css',
-    
-        ])
+    ])
 </head>
 
 <body>

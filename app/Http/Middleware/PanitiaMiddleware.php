@@ -10,12 +10,13 @@ class PanitiaMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah sudah login sebagai panitia
-        if (!session()->has('panitia')) {
+        if (!session()->has('id_panitia')) {
+
             return redirect()->route('panitia.login')
                 ->withErrors([
                     'login' => 'Silakan login sebagai panitia terlebih dahulu.'
                 ]);
+
         }
 
         return $next($request);

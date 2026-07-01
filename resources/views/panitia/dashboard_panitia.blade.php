@@ -3,9 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Panitia</title>
+    <title>Data Peserta - Panitia</title>
 
     @vite(['resources/css/dashPanitia.css'])
+
+    <style>
+        .filter-bar{
+            display:flex;
+            gap:20px;
+            align-items:center;
+            margin-bottom:20px;
+            flex-wrap:wrap;
+        }
+
+        .filter-item{
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+
+        .filter-item select{
+            padding:8px 12px;
+            border-radius:8px;
+        }
+    </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -13,21 +34,32 @@
 
 <div class="wrapper">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-
         <div class="logo">
             <h2>{{ session('nama_panitia') }}</h2>
             <p>Sistem Event Kampus</p>
         </div>
 
         <ul class="menu">
-            <li class="active">📊 Dashboard</li>
-            <li>👥 Data Peserta</li>
-            <li>🔒 Tutup Sesi</li>
-            <li>⚙️ Profil Panitia</li>
+            <li class="active">
+                📊 Dashboard
+            </li>
+            <li>
+                <a href="{{ route('panitia.data.peserta') }}">
+                    👥 Data Peserta
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('panitia.tutup.sesi') }}">
+                    🔒 Tutup Sesi
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('panitia.logout') }}">
+                    🚪 Logout
+                </a>
+            </li>
         </ul>
-
     </aside>
 
     <!-- CONTENT -->
@@ -148,6 +180,10 @@
             <div class="table-header">
 
                 <h3>Pendaftaran Terbaru</h3>
+
+                <a href="{{ route('panitia.data.peserta') }}" class="export-btn">
+                    Lihat Semua
+                </a>
 
             </div>
 

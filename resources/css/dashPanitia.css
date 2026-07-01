@@ -251,3 +251,28 @@ td{
     }
 
 }
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:8px;
+    transition:.3s;
+}
+
+.menu li a{
+    display:block;
+    color:#fff;
+    text-decoration:none;
+}
+
+.menu li:hover{
+    background:#1e293b;
+}
+
+.menu li.active{
+    background:#4f46e5;
+}

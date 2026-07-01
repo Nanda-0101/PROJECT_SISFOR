@@ -6,13 +6,14 @@ use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\PanitiaLoginController;
 use App\Http\Controllers\PanitiaDashboardController;
 use App\Http\Controllers\PanitiaPesertaController;
-
+use App\Http\Controllers\PanitiaTutupSesiController;
 
 /*
 |--------------------------------------------------------------------------
 | Public
 |--------------------------------------------------------------------------
 */
+
 
 Route::get('/public-landingpage', function () {
     return view('public.landingpage_public');
@@ -99,7 +100,6 @@ Route::post('/panitia-login', [PanitiaLoginController::class, 'login'])
 Route::get('/panitia-logout', [PanitiaLoginController::class, 'logout'])
     ->name('panitia.logout');
 
-
 /*
 |--------------------------------------------------------------------------
 | PANITIA (Middleware Panitia)
@@ -116,13 +116,19 @@ Route::middleware('panitia')->group(function () {
         [PanitiaPesertaController::class,'index'])
         ->name('panitia.data.peserta');
 
+    Route::get('/panitia-tutup-sesi',
+        [PanitiaTutupSesiController::class, 'index']
+        )->name('panitia.tutup.sesi');
+
+    Route::post(
+        '/panitia/tutup-sesi/{id}',
+        [PanitiaTutupSesiController::class, 'tutupSesi']
+        )->name('panitia.tutup.sesi.proses');
+
     Route::get('/panitia-profil', function () {
         return view('panitia.profil_panitia');
     })->name('panitia.profil');
 
-    Route::get('/panitia-tutup-sesi', function () {
-        return view('panitia.tutupSesi_panitia');
-    })->name('panitia.tutup.sesi');
 
 });
 

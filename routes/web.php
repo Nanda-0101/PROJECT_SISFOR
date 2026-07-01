@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PanitiaLoginController;
 use App\Http\Controllers\PanitiaDashboardController;
 use App\Http\Controllers\PanitiaPesertaController;
@@ -10,10 +11,9 @@ use App\Http\Controllers\PanitiaTutupSesiController;
 
 /*
 |--------------------------------------------------------------------------
-| Public
+| Public / Pengunjung Umum
 |--------------------------------------------------------------------------
 */
-
 
 Route::get('/public-landingpage', function () {
     return view('public.landingpage_public');
@@ -34,47 +34,57 @@ Route::get('/cekstatuspendaftaran-peserta', function () {
 |--------------------------------------------------------------------------
 */
 
-// Halaman Login
+// Halaman Login Admin
 Route::get('/admin-login', [AdminLoginController::class, 'index'])
     ->name('admin.login');
 
-// Proses Login
+// Proses Login Admin
 Route::post('/admin-login', [AdminLoginController::class, 'login'])
     ->name('admin.login.submit');
 
-// Logout
+// Proses Logout Admin
 Route::get('/admin-logout', [AdminLoginController::class, 'logout'])
     ->name('admin.logout');
 
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN (Middleware Admin)
+| PANEL ADMIN (Dilindungi Middleware Admin)
 |--------------------------------------------------------------------------
 */
 
 Route::middleware('admin')->group(function () {
 
+    // Dashboard Utama Admin
     Route::get('/admin-dashboardadmin', function () {
         return view('admin.dashboard_admin');
     })->name('admin.dashboard');
 
+    // Pembuatan Event Baru
     Route::get('/admin-pembuatanevent', function () {
         return view('admin.buatEvent_admin');
     })->name('admin.buat.event');
 
-    Route::get('/admin-kelolaadmin', function () {
-        return view('admin.kelolaAdmin_admin');
-    })->name('admin.kelola.admin');
+    // CRUD: Menampilkan Menu Kelola Admin & Aksi Hapus
+    Route::get('/admin-kelolaadmin', [AdminController::class, 'indexAdmin'])
+        ->name('admin.kelola.admin');
+        
+    Route::delete('/admin-kelolaadmin/{id}', [AdminController::class, 'destroyAdmin'])
+        ->name('admin.destroy');
 
+    // Menu Kelola Event
     Route::get('/admin-kelolaevent', function () {
         return view('admin.kelolaEvent_admin');
     })->name('admin.kelola.event');
 
-    Route::get('/admin-kelolapanitia', function () {
-        return view('admin.kelolaPanitia_admin');
-    })->name('admin.kelola.panitia');
+    // CRUD: Menampilkan Menu Kelola Panitia & Aksi Hapus
+    Route::get('/admin-kelolapanitia', [AdminController::class, 'indexPanitia'])
+        ->name('admin.kelola.panitia');
+        
+    Route::delete('/admin-kelolapanitia/{id}', [AdminController::class, 'destroyPanitia'])
+        ->name('panitia.destroy');
 
+    // Profil Admin
     Route::get('/admin-profiladmin', function () {
         return view('admin.profil_admin');
     })->name('admin.profil');
@@ -88,54 +98,53 @@ Route::middleware('admin')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-// Halaman Login
+// Halaman Login Panitia
 Route::get('/panitia-login', [PanitiaLoginController::class, 'index'])
     ->name('panitia.login');
 
-// Proses Login
+// Proses Login Panitia
 Route::post('/panitia-login', [PanitiaLoginController::class, 'login'])
     ->name('panitia.login.submit');
 
-// Logout
+// Proses Logout Panitia
 Route::get('/panitia-logout', [PanitiaLoginController::class, 'logout'])
     ->name('panitia.logout');
 
+
 /*
 |--------------------------------------------------------------------------
-| PANITIA (Middleware Panitia)
+| PANEL PANITIA (Dilindungi Middleware Panitia)
 |--------------------------------------------------------------------------
 */
 
 Route::middleware('panitia')->group(function () {
 
-    Route::get('/panitia-dashboard',
-        [PanitiaDashboardController::class,'index'])
+    // Dashboard Utama Panitia
+    Route::get('/panitia-dashboard', [PanitiaDashboardController::class, 'index'])
         ->name('panitia.dashboard');
 
-    Route::get('/panitia-data-peserta',
-        [PanitiaPesertaController::class,'index'])
+    // Rekap & Filter Data Peserta Event
+    Route::get('/panitia-data-peserta', [PanitiaPesertaController::class, 'index'])
         ->name('panitia.data.peserta');
 
-    Route::get('/panitia-tutup-sesi',
-        [PanitiaTutupSesiController::class, 'index']
-        )->name('panitia.tutup.sesi');
+    // Manajemen Penutupan Sesi Registrasi Event
+    Route::get('/panitia-tutup-sesi', [PanitiaTutupSesiController::class, 'index'])
+        ->name('panitia.tutup.sesi');
 
-    Route::post(
-        '/panitia/tutup-sesi/{id}',
-        [PanitiaTutupSesiController::class, 'tutupSesi']
-        )->name('panitia.tutup.sesi.proses');
+    Route::post('/panitia/tutup-sesi/{id}', [PanitiaTutupSesiController::class, 'tutupSesi'])
+        ->name('panitia.tutup.sesi.proses');
 
+    // Profil Panitia
     Route::get('/panitia-profil', function () {
         return view('panitia.profil_panitia');
     })->name('panitia.profil');
-
 
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| Redirect Default
+| Pengalihan Alamat Default (Root URL Redirect)
 |--------------------------------------------------------------------------
 */
 

@@ -1,14 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Halaman Profil Admin Berhasil Dimuat! 👤');
 
-    const formProfil = document.getElementById('form-profil');
-    
-    if (formProfil) {
-        formProfil.addEventListener('submit', (e) => {
-            e.preventDefault(); 
-            // Disini logika Ajax atau form handling
-            console.log('Menyimpan perubahan profil...');
-            alert('Perubahan profil berhasil disimpan (Simulasi)');
+    console.log('Profil Admin Loaded');
+
+    const form = document.getElementById('form-profil');
+
+    if(form){
+
+        form.addEventListener('submit', function(){
+
+            const btn = this.querySelector('.btn-simpan');
+
+            btn.disabled = true;
+            btn.innerHTML =
+                '<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
+
         });
+
     }
+
 });

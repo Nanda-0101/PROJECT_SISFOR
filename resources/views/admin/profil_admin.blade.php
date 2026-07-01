@@ -8,12 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    @vite(['resources/css/profil_admin.css', 'resources/js/profil_admin.js'])
+    @vite(['resources/css/profil_admin.css'])
 </head>
 <body>
 
 <div class="d-flex min-vh-100 layout-wrapper">
-    {{-- ========== SIDEBAR (tidak diubah) ========== --}}
+    {{-- ========== SIDEBAR ========== --}}
     <aside class="sidebar d-flex flex-column">
         <div class="sidebar-brand d-flex align-items-center gap-3 mb-5">
             <img src="{{ asset('assets/Logo - SIVENTUS.png') }}" alt="Logo SIVENTUS" class="brand-logo">
@@ -24,34 +24,34 @@
         </div>
         
         <div class="sidebar-menu flex-grow-1">
-            <a href="/admin/dashboard" class="menu-item">
+            <a href="{{ route('admin.dashboard') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Dashboard Panitia.png') }}" alt="Dashboard" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Dashboard Admin</span></div>
             </a>
-            <a href="/admin/buat-event" class="menu-item">
+            <a href="{{ route('admin.buat.event') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Buat Event Siderbar.png') }}" alt="Buat Event" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Buat Event</span></div>
             </a>
-            <a href="/admin/kelola-event" class="menu-item">
+            <a href="{{ route('admin.kelola.event') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Kelola Event.png') }}" alt="Kelola Event" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Kelola Event</span></div>
             </a>
-            <a href="/admin/kelola-panitia" class="menu-item">
+            <a href="{{ route('admin.kelola.panitia') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Kelola Panitia.png') }}" alt="Kelola Panitia" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Kelola Panitia</span></div>
             </a>
-            <a href="/admin/kelola-admin" class="menu-item">
+            <a href="{{ route('admin.kelola.admin') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Kelola Admin.png') }}" alt="Kelola Admin" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Kelola Admin</span></div>
             </a>
-            <a href="/admin/profil" class="menu-item active">
+            <a href="{{ route('admin.profil') }}" class="menu-item active">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Profil Panitia.png') }}" alt="Profil Admin" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Profil Admin</span></div>
             </a>
         </div>
 
         <div class="sidebar-footer mt-auto">
-            <form method="POST" action="{{ url('/logout') }}">
+            <form method="POST" action="{{ route('admin.logout') }}">
                 @csrf
                 <button type="submit" class="btn-logout-sidebar w-100 d-flex justify-content-center align-items-center gap-2">
                     <i class="bi bi-box-arrow-right fs-5 text-info"></i> Log Out
@@ -71,6 +71,24 @@
             </div>
         </div>
 
+        {{-- Flash Message --}}
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> 
+                @foreach($errors->all() as $error)
+                    <div>{{ $error }}</div>
+                @endforeach
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="row g-4">
 
             {{-- Kolom Kiri: Form --}}
@@ -78,54 +96,52 @@
 
                 {{-- Avatar & Info Singkat --}}
                 <div class="profile-header-card mb-4">
+                    @php
+                        $nama = $admin->nama_admin ?? 'Admin';
+                        $namaParts = explode(' ', $nama);
+                        $avatar = strtoupper(substr($namaParts[0], 0, 1));
+                        if (isset($namaParts[1])) {
+                            $avatar .= strtoupper(substr($namaParts[1], 0, 1));
+                        }
+                    @endphp
                     <div class="profile-avatar">
-                        {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}{{ strtoupper(substr(strstr(auth()->user()->name ?? 'Admin', ' '), 1, 1)) }}
+                        {{ $avatar }}
                     </div>
                     <div>
-                        <div class="profile-info-name">{{ auth()->user()->name ?? 'Admin Utama' }}</div>
+                        <div class="profile-info-name">{{ $admin->nama_admin }}</div>
                         <div class="profile-info-role">Administrator</div>
-                        <div class="profile-info-email">{{ auth()->user()->email ?? 'admin@siventus.com' }}</div>
+                        <div class="profile-info-email">{{ $admin->username }}</div>
                     </div>
                 </div>
 
                 {{-- Form Edit Profil --}}
                 <div class="form-card bg-white rounded-3 shadow-sm border border-light">
                     <div class="form-card-body">
+                        <form action="{{ route('admin.profil.update') }}" method="POST">
                             @csrf
-                            @method('PUT')
 
-                            {{-- Nama Lengkap --}}
+                            {{-- Nama Admin (Readonly) --}}
                             <div class="mb-3">
-                                <label class="form-label">Nama Lengkap</label>
+                                <label class="form-label">Nama Admin</label>
                                 <div class="input-icon-wrapper">
                                     <i class="bi bi-person input-icon"></i>
                                     <input type="text"
-                                           class="form-control custom-input @error('name') is-invalid @enderror"
-                                           name="name"
-                                           value="{{ old('name', auth()->user()->name ?? 'Admin Utama') }}"
-                                           placeholder="Masukkan nama lengkap"
-                                           required>
+                                           class="form-control custom-input"
+                                           value="{{ $admin->nama_admin }}"
+                                           readonly>
                                 </div>
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
                             </div>
 
-                            {{-- Email --}}
+                            {{-- Username (Readonly) --}}
                             <div class="mb-3">
-                                <label class="form-label">Alamat Email</label>
+                                <label class="form-label">Username</label>
                                 <div class="input-icon-wrapper">
-                                    <i class="bi bi-envelope input-icon"></i>
-                                    <input type="email"
-                                           class="form-control custom-input @error('email') is-invalid @enderror"
-                                           name="email"
-                                           value="{{ old('email', auth()->user()->email ?? 'admin@siventus.com') }}"
-                                           placeholder="Masukkan alamat email"
-                                           required>
+                                    <i class="bi bi-person-badge input-icon"></i>
+                                    <input type="text"
+                                           class="form-control custom-input"
+                                           value="{{ $admin->username }}"
+                                           readonly>
                                 </div>
-                                @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
                             </div>
 
                             {{-- Divider --}}
@@ -148,7 +164,7 @@
                                 </div>
                                 <div class="input-hint">
                                     <i class="bi bi-info-circle" style="font-size:12px;"></i>
-                                    Minimal 8 karakter. Kosongkan jika tidak ingin mengubah.
+                                    Minimal 4 karakter. Kosongkan jika tidak ingin mengubah.
                                 </div>
                                 @error('password')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -196,7 +212,7 @@
                         <div>
                             <div class="info-side-label">Bergabung</div>
                             <div class="info-side-value">
-                                {{ isset(auth()->user()->created_at) ? auth()->user()->created_at->isoFormat('D MMMM YYYY') : '1 Januari 2025' }}
+                                {{ \Carbon\Carbon::parse($admin->created_at)->isoFormat('D MMMM YYYY') }}
                             </div>
                         </div>
                     </div>
@@ -237,5 +253,6 @@ function togglePassword(inputId, btn) {
 }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

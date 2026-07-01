@@ -143,7 +143,7 @@
                         <div class="card-icon">
                             <img src="{{ asset('assets/Asset - Kelola Kategori.png') }}" class="card-custom-icon">
                         </div>
-                        <h3 class="card-title">Kelola Kategori</h3>
+                        <h3 class="card-title">Kelola Admin</h3>
                     </div>
                 </a>
             </div>

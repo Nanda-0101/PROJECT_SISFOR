@@ -26,7 +26,12 @@
                 </h2>
 
                 <p id="desc">
-                    Selamat datang di Sistem Informasi Event Universitas (SIVENPUS).
+                    SIVENPUS adalah Sistem Informasi Pendaftaran Peserta Event Kampus
+                    dengan Validasi Kuota dan Pembagian Sesi. Sistem ini membantu
+                    panitia mengelola proses pendaftaran peserta secara terkomputerisasi,
+                    mulai dari registrasi, validasi kuota, hingga pembagian sesi secara
+                    otomatis sehingga proses penyelenggaraan event menjadi lebih efektif
+                    dan terorganisir.
                 </p>
             </div>
 

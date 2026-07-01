@@ -8,13 +8,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!session()->has('admin_login')) {
+            return redirect('/admin-login')
+                ->withErrors([
+                    'login' => 'Silakan login sebagai admin terlebih dahulu.'
+                ]);
+        }
+
         return $next($request);
     }
 }

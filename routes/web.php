@@ -43,7 +43,7 @@ Route::post('/admin-login', [AdminLoginController::class, 'login'])
     ->name('admin.login.submit');
 
 // Logout
-Route::get('/admin-logout', [AdminLoginController::class, 'logout'])
+Route::post('/admin-logout', [AdminLoginController::class, 'logout'])
     ->name('admin.logout');
 
 

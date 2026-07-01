@@ -17,14 +17,13 @@
     <aside class="sidebar">
 
         <div class="logo">
-            <h2>PANITIA</h2>
+            <h2>{{ session('nama_panitia') }}</h2>
             <p>Sistem Event Kampus</p>
         </div>
 
         <ul class="menu">
             <li class="active">📊 Dashboard</li>
             <li>👥 Data Peserta</li>
-            <li>📁 Export Data</li>
             <li>🔒 Tutup Sesi</li>
             <li>⚙️ Profil Panitia</li>
         </ul>
@@ -38,6 +37,7 @@
         <div class="header-box">
 
             <div>
+
                 <span class="badge">
                     PANITIA LEVEL
                 </span>
@@ -47,6 +47,7 @@
                 <p>
                     Monitoring seluruh data pendaftaran event kampus
                 </p>
+
             </div>
 
             <div class="date-box">
@@ -60,22 +61,30 @@
 
             <div class="card">
                 <p>Total Pendaftar</p>
-                <h2 class="indigo">150</h2>
+                <h2 class="indigo">
+                    {{ $totalPeserta }}
+                </h2>
             </div>
 
             <div class="card">
                 <p>Sesi Aktif</p>
-                <h2 class="green">4</h2>
+                <h2 class="green">
+                    {{ $sesiAktif }}
+                </h2>
             </div>
 
             <div class="card">
                 <p>Total Event</p>
-                <h2 class="blue">8</h2>
+                <h2 class="blue">
+                    {{ $totalEvent }}
+                </h2>
             </div>
 
             <div class="card">
                 <p>Sesi Penuh</p>
-                <h2 class="red">2</h2>
+                <h2 class="red">
+                    {{ $sesiPenuh }}
+                </h2>
             </div>
 
         </div>
@@ -83,7 +92,7 @@
         <!-- CHART -->
         <div class="chart-box">
 
-            <h3>Grafik Jumlah Pendaftar</h3>
+            <h3>Grafik Jumlah Pendaftar per Event</h3>
 
             <canvas id="chartPendaftar"></canvas>
 
@@ -94,44 +103,42 @@
 
             <h3>Rekap Per Event</h3>
 
-            <div class="event-item">
+            @forelse($rekapEvent as $event)
 
-                <div class="event-header">
-                    <span>Grand Tech Annual Fest 2026</span>
-                    <strong>80 / 100</strong>
+                @php
+                    $persen = ($event->kuota > 0)
+                        ? round(($event->peserta / $event->kuota) * 100)
+                        : 0;
+                @endphp
+
+                <div class="event-item">
+
+                    <div class="event-header">
+
+                        <span>{{ $event->nama_event }}</span>
+
+                        <strong>
+                            {{ $event->peserta }} / {{ $event->kuota }}
+                        </strong>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            class="progress-bar"
+                            style="width: {{ $persen }}%">
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="progress">
-                    <div class="progress-bar" style="width:80%"></div>
-                </div>
+            @empty
 
-            </div>
+                <p>Tidak ada data event.</p>
 
-            <div class="event-item">
-
-                <div class="event-header">
-                    <span>Workshop Kreativitas Digital</span>
-                    <strong>45 / 60</strong>
-                </div>
-
-                <div class="progress">
-                    <div class="progress-bar green-bar" style="width:75%"></div>
-                </div>
-
-            </div>
-
-            <div class="event-item">
-
-                <div class="event-header">
-                    <span>Seminar Artificial Intelligence</span>
-                    <strong>65 / 100</strong>
-                </div>
-
-                <div class="progress">
-                    <div class="progress-bar blue-bar" style="width:65%"></div>
-                </div>
-
-            </div>
+            @endforelse
 
         </div>
 
@@ -142,15 +149,12 @@
 
                 <h3>Pendaftaran Terbaru</h3>
 
-                <button class="export-btn">
-                    Export Excel
-                </button>
-
             </div>
 
             <table>
 
                 <thead>
+
                     <tr>
                         <th>NIM</th>
                         <th>Nama</th>
@@ -158,45 +162,46 @@
                         <th>Sesi</th>
                         <th>Status</th>
                     </tr>
+
                 </thead>
 
                 <tbody>
 
-                    <tr>
-                        <td>2201010043</td>
-                        <td>I Putu Nanda Aditya</td>
-                        <td>Tech Fest</td>
-                        <td>Sesi Pagi</td>
-                        <td>
-                            <span class="status">
-                                Terdaftar
-                            </span>
-                        </td>
-                    </tr>
+                @forelse($pendaftaranTerbaru as $row)
 
                     <tr>
-                        <td>2201010050</td>
-                        <td>Ni Made Ayu Pratiwi</td>
-                        <td>Workshop Digital</td>
-                        <td>Sesi Siang</td>
+
+                        <td>{{ $row->nim }}</td>
+
+                        <td>{{ $row->nama }}</td>
+
+                        <td>{{ $row->nama_event }}</td>
+
+                        <td>{{ $row->nama_sesi }}</td>
+
                         <td>
+
                             <span class="status">
-                                Terdaftar
+
+                                {{ ucfirst(str_replace('_',' ', $row->status_pendaftaran)) }}
+
                             </span>
+
                         </td>
+
                     </tr>
 
+                @empty
+
                     <tr>
-                        <td>2201010060</td>
-                        <td>Kadek Dwi</td>
-                        <td>Seminar AI</td>
-                        <td>Sesi 2</td>
-                        <td>
-                            <span class="status">
-                                Terdaftar
-                            </span>
+
+                        <td colspan="5" style="text-align:center">
+                            Belum ada data pendaftaran.
                         </td>
+
                     </tr>
+
+                @endforelse
 
                 </tbody>
 
@@ -213,19 +218,49 @@
 const ctx = document.getElementById('chartPendaftar');
 
 new Chart(ctx, {
+
     type: 'bar',
+
     data: {
-        labels: [
-            'Tech Fest',
-            'Workshop',
-            'Seminar AI',
-            'UI UX Camp'
-        ],
+
+        labels: @json($grafik->pluck('nama_event')),
+
         datasets: [{
+
             label: 'Jumlah Pendaftar',
-            data: [80,45,65,90]
+
+            data: @json($grafik->pluck('total'))
+
         }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+
+                display: true
+
+            }
+
+        },
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true
+
+            }
+
+        }
+
     }
+
 });
 
 </script>

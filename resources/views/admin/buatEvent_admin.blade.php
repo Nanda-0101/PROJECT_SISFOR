@@ -93,16 +93,10 @@
 
         </div>
 
-        <div class="sidebar-footer mt-auto">
-
-            <form method="POST" action="{{ route('admin.logout') }}">
-                @csrf
-                <button class="btn-logout-sidebar w-100">
-                    <i class="bi bi-box-arrow-right"></i>
-                    Log Out
-                </button>
-            </form>
-
+       <div class="sidebar-footer mt-auto">
+            <a href="{{ route('admin.logout') }}" class="btn-logout-sidebar w-100 d-flex justify-content-center align-items-center gap-2" style="text-decoration:none;">
+                <i class="bi bi-box-arrow-right fs-5 text-info"></i> Log Out
+            </a>
         </div>
 
     </aside>

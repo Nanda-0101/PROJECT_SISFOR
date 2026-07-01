@@ -1,54 +1,11 @@
 'use strict';
 
 /* ================================================
-   MOCK DATA — BACKEND TOLONG GANTI Y HIDUP JOKOWI
-   ================================================ */
-const mockData = [
-    {
-        nim: '2201010043',
-        email: 'budi.santoso@student.ac.id',
-        event: 'grand-tech',
-        nama: 'Budi Santoso',
-        wa: '081234567890',
-        sesi: 'Sesi Pagi — AI (08.00–12.00)',
-        kategori: 'Internal Kampus',
-        tanggal: '12 Juni 2026',
-        status: 'diterima',
-        ticket: 'EVT-2026-00432',
-    },
-    {
-        nim: '2201020087',
-        email: 'siti.rahayu@student.ac.id',
-        event: 'workshop-uiux',
-        nama: 'Siti Rahayu',
-        wa: '082198765432',
-        sesi: 'Sesi Penuh (09.00–17.00)',
-        kategori: 'Internal Kampus',
-        tanggal: '15 Juni 2026',
-        status: 'pending',
-        ticket: null,
-    },
-    {
-        nim: '2201030011',
-        email: 'alex.wijaya@student.ac.id',
-        event: 'seminar-ai',
-        nama: 'Alex Wijaya',
-        wa: '085611223344',
-        sesi: 'Sesi Siang — Full',
-        kategori: 'Umum',
-        tanggal: '10 Juni 2026',
-        status: 'ditolak',
-        alasan: 'Kuota sesi yang dipilih sudah penuh.',
-        ticket: null,
-    },
-];
-
-/* ================================================
    ELEMEN DOM
    ================================================ */
 const btnCek         = document.getElementById('btnCek');
 const btnTryAgain    = document.getElementById('btnTryAgain');
-const searchInput    = document.getElementById('searchInput');
+const emailInput     = document.getElementById('emailInput');
 const eventSelect    = document.getElementById('eventSelect');
 const resultArea     = document.getElementById('resultArea');
 const skeletonLoader = document.getElementById('skeletonLoader');
@@ -64,7 +21,7 @@ const cardNotFound   = document.getElementById('cardNotFound');
 
 function hideAllCards() {
     [cardDiterima, cardPending, cardDitolak, cardNotFound].forEach(c => {
-        c.style.display = 'none';
+        if (c) c.style.display = 'none';
     });
 }
 
@@ -82,49 +39,49 @@ function scrollToResult() {
     resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function fetchStatus(nimOrEmail, eventId) {
-    return new Promise((resolve) => {
-        // Simulasi network delay
-        setTimeout(() => {
-            const query = nimOrEmail.trim().toLowerCase();
-            const found = mockData.find(d =>
-                (d.nim === query || d.email.toLowerCase() === query) &&
-                d.event === eventId
-            );
-            resolve(found || null);
-        }, 1400);
-    });
-}
-
 /* ================================================
    RENDER HASIL
    ================================================ */
 function renderDiterima(data) {
-    document.getElementById('resultNama').textContent     = data.nama;
-    document.getElementById('resultNIM').textContent      = data.nim;
-    document.getElementById('resultEmail').textContent    = data.email;
-    document.getElementById('resultWA').textContent       = data.wa || '—';
-    document.getElementById('resultEvent').textContent    = eventSelect.options[eventSelect.selectedIndex].text;
-    document.getElementById('resultSesi').textContent     = data.sesi;
-    document.getElementById('resultKategori').textContent = data.kategori;
-    document.getElementById('resultTanggal').textContent  = data.tanggal;
-    document.getElementById('resultTicket').textContent   = data.ticket;
+    document.getElementById('resultNama').textContent     = data.nama || '—';
+    document.getElementById('resultNIM').textContent      = data.nim || '—';
+    document.getElementById('resultEmail').textContent    = data.email || '—';
+    document.getElementById('resultWA').textContent       = data.whatsapp || '—';
+    document.getElementById('resultEvent').textContent    = data.nama_event || '—';
+    document.getElementById('resultSesi').textContent     = data.nama_sesi || '—';
+    document.getElementById('resultKategori').textContent = data.nama_kategori || '—';
+    document.getElementById('resultTanggal').textContent  = data.waktu_daftar ? new Date(data.waktu_daftar).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+    document.getElementById('resultTicket').textContent   = data.kode_pendaftaran || '—';
     cardDiterima.style.display = 'block';
 }
 
 function renderPending(data) {
-    document.getElementById('pendingNama').textContent  = data.nama;
-    document.getElementById('pendingNIM').textContent   = data.nim;
-    document.getElementById('pendingEvent').textContent = eventSelect.options[eventSelect.selectedIndex].text;
-    document.getElementById('pendingSesi').textContent  = data.sesi;
+    const isPembayaran = data.status_pendaftaran === 'menunggu_pembayaran';
+    
+    document.getElementById('pendingNama').textContent  = data.nama || '—';
+    document.getElementById('pendingNIM').textContent   = data.nim || '—';
+    document.getElementById('pendingEvent').textContent = data.nama_event || '—';
+    document.getElementById('pendingSesi').textContent  = data.nama_sesi || '—';
+    
+    const titleEl = document.getElementById('pendingTitle');
+    const msgEl = document.getElementById('pendingMessage');
+    
+    if (isPembayaran) {
+        titleEl.textContent = 'MENUNGGU PEMBAYARAN';
+        msgEl.textContent = 'Silakan selesaikan pembayaran Anda. Kode pembayaran akan dikirim ke email Anda.';
+    } else {
+        titleEl.textContent = 'MENUNGGU VERIFIKASI';
+        msgEl.textContent = 'Pendaftaranmu sedang dalam proses verifikasi oleh panitia. Harap menunggu konfirmasi lebih lanjut melalui email.';
+    }
+    
     cardPending.style.display = 'block';
 }
 
 function renderDitolak(data) {
-    document.getElementById('ditolakNama').textContent   = data.nama;
-    document.getElementById('ditolakNIM').textContent    = data.nim;
-    document.getElementById('ditolakEvent').textContent  = eventSelect.options[eventSelect.selectedIndex].text;
-    document.getElementById('ditolakAlasan').textContent = data.alasan || 'Tidak ada keterangan.';
+    document.getElementById('ditolakNama').textContent  = data.nama || '—';
+    document.getElementById('ditolakNIM').textContent   = data.nim || '—';
+    document.getElementById('ditolakEvent').textContent = data.nama_event || '—';
+    document.getElementById('ditolakSesi').textContent  = data.nama_sesi || '—';
     cardDitolak.style.display = 'block';
 }
 
@@ -136,16 +93,16 @@ function renderNotFound() {
    VALIDASI INPUT
    ================================================ */
 function validate() {
-    const val = searchInput.value.trim();
+    const val = emailInput.value.trim();
     const evt = eventSelect.value;
 
     if (!val) {
-        searchInput.focus();
-        searchInput.style.borderColor = '#ef4444';
-        searchInput.style.boxShadow   = '0 0 0 4px rgba(239,68,68,0.1)';
+        emailInput.focus();
+        emailInput.style.borderColor = '#ef4444';
+        emailInput.style.boxShadow   = '0 0 0 4px rgba(239,68,68,0.1)';
         setTimeout(() => {
-            searchInput.style.borderColor = '';
-            searchInput.style.boxShadow   = '';
+            emailInput.style.borderColor = '';
+            emailInput.style.boxShadow   = '';
         }, 2000);
         return false;
     }
@@ -165,44 +122,69 @@ function validate() {
 }
 
 /* ================================================
-   Tombol Cek
+   CEK STATUS VIA AJAX
    ================================================ */
 async function handleCek() {
     if (!validate()) return;
 
-    const nimOrEmail = searchInput.value.trim();
-    const eventId    = eventSelect.value;
+    const email = emailInput.value.trim();
+    const idEvent = eventSelect.value;
 
     showSkeleton();
     scrollToResult();
 
-    const data = await fetchStatus(nimOrEmail, eventId);
+    try {
+        const response = await fetch('/cek-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                email: email,
+                id_event: idEvent
+            })
+        });
 
-    hideSkeleton();
-    hideAllCards();
+        const result = await response.json();
 
-    if (!data) {
+        hideSkeleton();
+        hideAllCards();
+
+        if (!result.success) {
+            renderNotFound();
+            return;
+        }
+
+        const data = result.data;
+
+        if (data.status_pendaftaran === 'terdaftar') {
+            renderDiterima(data);
+        } else if (data.status_pendaftaran === 'menunggu_verifikasi' || data.status_pendaftaran === 'menunggu_pembayaran') {
+            renderPending(data);
+        } else if (data.status_pendaftaran === 'dibatalkan') {
+            renderDitolak(data);
+        } else {
+            renderNotFound();
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        hideSkeleton();
+        hideAllCards();
         renderNotFound();
-        return;
     }
-
-    if (data.status === 'diterima') renderDiterima(data);
-    else if (data.status === 'pending') renderPending(data);
-    else if (data.status === 'ditolak') renderDitolak(data);
-    else renderNotFound();
 }
 
 /* ================================================
-    Tombol Coba Lagi
+   COBA LAGI
    ================================================ */
 function handleTryAgain() {
     resultArea.style.display = 'none';
     hideAllCards();
-    searchInput.value  = '';
+    emailInput.value  = '';
     eventSelect.value  = '';
-    searchInput.focus();
-
-    // Scroll ke form
+    emailInput.focus();
     document.querySelector('.search-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -212,7 +194,11 @@ function handleTryAgain() {
 btnCek.addEventListener('click', handleCek);
 btnTryAgain.addEventListener('click', handleTryAgain);
 
-// Juga trigger saat Enter di input
-searchInput.addEventListener('keydown', (e) => {
+// Enter key di input
+emailInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleCek();
+});
+
+eventSelect.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') handleCek();
 });

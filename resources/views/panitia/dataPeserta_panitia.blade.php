@@ -100,7 +100,8 @@
 
                 <h3>Data Peserta</h3>
 
-                <a href="#" class="export-btn">
+                <<a href="{{ route('panitia.data.peserta.export', request()->query()) }}"
+                    class="export-btn">
                     ⬇ Export Excel
                 </a>
 

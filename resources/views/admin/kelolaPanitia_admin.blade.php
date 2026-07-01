@@ -65,7 +65,7 @@
                 <h4 class="fw-bold mb-1">Kelola Panitia</h4>
                 <p class="mb-0 text-white-50">Kelola data dan hak akses panitia event</p>
             </div>
-            <button class="btn btn-tambah-top" id="btn-tambah-panitia">
+            <button class="btn btn-tambah-top" data-bs-toggle="modal" data-bs-target="#modalTambahPanitia">
                 <i class="bi bi-person-plus-fill"></i> Tambah Panitia
             </button>
         </div>
@@ -78,15 +78,23 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         {{-- Filter & Search --}}
         <div class="filter-bar mb-3">
             <div class="input-search-wrapper">
                 <i class="bi bi-search"></i>
                 <input type="text" id="searchPanitia" class="form-control" placeholder="Cari nama atau username panitia...">
             </div>
-            <select class="form-select">
+            <select class="form-select" id="filterStatus">
                 <option value="">Semua Status</option>
-                <option value="aktif">Anggota Aktif</option>
+                <option value="aktif">Aktif</option>
+                <option value="nonaktif">Nonaktif</option>
             </select>
         </div>
 
@@ -99,12 +107,13 @@
                             <th>No</th>
                             <th>Nama Panitia</th>
                             <th>Username</th>
+                            <th>Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($panitias as $index => $p)
-                        <tr>
+                        <tr data-status="{{ $p->status }}">
                             <td class="row-num">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</td>
                             <td>
                                 <div class="panitia-cell">
@@ -124,9 +133,20 @@
                                 </span>
                             </td>
                             <td>
+                                @if($p->status == 'aktif')
+                                    <span class="badge bg-success">Aktif</span>
+                                @else
+                                    <span class="badge bg-danger">Nonaktif</span>
+                                @endif
+                            </td>
+                            <td>
                                 <div class="btn-action-wrap">
-                                    <button class="btn btn-sm btn-outline-primary btn-edit" title="Edit" onclick="alert('Detail / Username: {{ $p->username }}')">
-                                        <i class="bi bi-pencil"></i>
+                                    <button
+                                        class="btn btn-sm btn-outline-info"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#detailPanitia{{ $p->id_panitia }}"
+                                        title="Lihat Detail">
+                                        <i class="bi bi-eye"></i>
                                     </button>
                                     <form action="{{ route('panitia.destroy', $p->id_panitia) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus panitia {{ $p->nama_panitia }}?')" class="d-inline">
                                         @csrf
@@ -138,9 +158,50 @@
                                 </div>
                             </td>
                         </tr>
+
+                        {{-- ============================================================ --}}
+                        {{-- MODAL DETAIL PANITIA --}}
+                        {{-- ============================================================ --}}
+                        <div class="modal fade" id="detailPanitia{{ $p->id_panitia }}" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">
+                                            <i class="bi bi-person-circle me-2"></i> Detail Panitia
+                                        </h5>
+                                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Nama Panitia</label>
+                                            <input class="form-control" value="{{ $p->nama_panitia }}" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Username</label>
+                                            <input class="form-control" value="{{ $p->username }}" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Status</label>
+                                            <input class="form-control" value="{{ ucfirst($p->status) }}" readonly>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Bergabung</label>
+                                            <input class="form-control" value="{{ \Carbon\Carbon::parse($p->created_at)->translatedFormat('d F Y H:i') }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center text-muted py-4">Data panitia tidak tersedia di database.</td>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="bi bi-people fs-1 d-block mb-2"></i>
+                                Data panitia tidak tersedia di database.
+                            </td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -158,14 +219,83 @@
     </main>
 </div>
 
+{{-- ============================================================ --}}
+{{-- MODAL TAMBAH PANITIA --}}
+{{-- ============================================================ --}}
+<div class="modal fade" id="modalTambahPanitia" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('panitia.store') }}" method="POST">
+                @csrf
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-person-plus-fill me-2"></i> Tambah Panitia
+                    </h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Panitia <span class="text-danger">*</span></label>
+                        <input type="text" name="nama_panitia" class="form-control" placeholder="Masukkan nama panitia" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Username <span class="text-danger">*</span></label>
+                        <input type="text" name="username" class="form-control" placeholder="Masukkan username" required>
+                        <small class="text-muted">Username harus unik dan tidak boleh sama dengan yang lain.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password <span class="text-danger">*</span></label>
+                        <input type="text" name="password" class="form-control" placeholder="Masukkan password" required>
+                        <small class="text-muted">Minimal 4 karakter.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status <span class="text-danger">*</span></label>
+                        <select name="status" class="form-select" required>
+                            <option value="aktif">Aktif</option>
+                            <option value="nonaktif">Nonaktif</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-check-circle me-1"></i> Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Fitur Live Search untuk Panitia
+    // ============================================================
+    // FITUR LIVE SEARCH PANITIA
+    // ============================================================
     document.getElementById('searchPanitia').addEventListener('input', function () {
         const q = this.value.toLowerCase();
-        document.querySelectorAll('#panitiaTable tbody tr').forEach(row => {
-            if(!row.classList.contains('text-center')) {
-                row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+        document.querySelectorAll('#panitiaTable tbody tr:not(.text-center)').forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(q) ? '' : 'none';
+        });
+    });
+
+    // ============================================================
+    // FITUR FILTER STATUS
+    // ============================================================
+    document.getElementById('filterStatus').addEventListener('change', function () {
+        const status = this.value;
+        document.querySelectorAll('#panitiaTable tbody tr:not(.text-center)').forEach(row => {
+            if (status === '') {
+                row.style.display = '';
+            } else {
+                row.style.display = row.dataset.status === status ? '' : 'none';
             }
         });
     });

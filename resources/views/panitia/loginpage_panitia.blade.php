@@ -22,7 +22,7 @@
             <div class="content-left">
                 <h2 id="title">
                     Halo <br>
-                    <span style="white-space: nowrap;">Panitia 👋</span>
+                    <span style="white-space: nowrap;">panitia 👋</span>
                 </h2>
 
                 <p id="desc">
@@ -46,14 +46,10 @@
                     <img src="{{ asset('assets/Logo - Unud.png') }}"
                          class="brand-logo"
                          alt="Logo Unud">
-
-                    <img src="{{ asset('assets/Logo - Informatika.png') }}"
-                         class="brand-logo"
-                         alt="Logo Informatika">
                 </div>
 
                 <h3 class="brand-title">
-                    SIVENPUS - PANITIA
+                    SIVENPUS - panitia
                 </h3>
 
                 <h5 class="welcome-text mt-4">
@@ -108,14 +104,20 @@
 
                 </form>
 
-                <div class="forgot-box mt-3">
-                    <p class="forgot-text mb-0">
-                        Lupa kata sandi?
-                        <a href="#" class="click-here">
-                            Klik di sini
-                        </a>
-                    </p>
-                </div>
+
+
+                <p class="admin-text">
+
+                    Anda adalah Admin?
+
+                    <a href="{{ url('/admin-login') }}"
+                       class="toggle text-decoration-none">
+
+                        Login di sini
+
+                    </a>
+
+                </p>
 
             </div>
 

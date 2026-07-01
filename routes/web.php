@@ -20,6 +20,9 @@ use App\Http\Controllers\PanitiaLoginController;
 use App\Http\Controllers\PanitiaDashboardController;
 use App\Http\Controllers\PanitiaPesertaController;
 use App\Http\Controllers\PanitiaTutupSesiController;
+use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\PendaftaranController;
+use App\Http\Controllers\CekStatusPendaftaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,13 +30,36 @@ use App\Http\Controllers\PanitiaTutupSesiController;
 |--------------------------------------------------------------------------
 */
 
-Route::view('/', 'public.landingpage_public');
+Route::get('/', [LandingPageController::class, 'index'])
+    ->name('landing.page');
+    
+Route::get('/public-landingpage', [LandingPageController::class, 'index'])
+    ->name('landing.page.public');
+    
+// Public routes
+Route::get('/pendaftaran-peserta', [PendaftaranController::class, 'index'])
+    ->name('pendaftaran.index');
 
-Route::view('/public-landingpage', 'public.landingpage_public');
+Route::post('/pendaftaran', [PendaftaranController::class, 'store'])
+    ->name('pendaftaran.store');
 
-Route::view('/pendaftaran-peserta', 'public.pendaftaranPeserta_public');
+Route::get('/pendaftaran/success', [PendaftaranController::class, 'success'])
+    ->name('pendaftaran.success');
 
-Route::view('/cekstatuspendaftaran-peserta', 'public.cekStatusPendaftaran_public');
+// API endpoints untuk AJAX
+Route::get('/api/event/{id}/sesi', [PendaftaranController::class, 'getSesi']);
+Route::get('/api/kategori/{id}/fields', [PendaftaranController::class, 'getFields']);
+
+// Payment
+Route::post('/payment/confirm', [PendaftaranController::class, 'confirmPayment'])->name('payment.confirm');
+Route::get('/payment/success', [PendaftaranController::class, 'paymentCallback']);
+
+// Cek Status
+Route::get('/cekstatuspendaftaran-peserta', [CekStatusPendaftaranController::class, 'index'])
+    ->name('cek.status.index');
+
+Route::post('/cek-status', [CekStatusPendaftaranController::class, 'cek'])
+    ->name('cek.status');
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +128,9 @@ Route::middleware('admin')->group(function () {
     Route::delete('/admin-kelolaadmin/{id}', [KelolaAdminController::class, 'destroy'])
         ->name('admin.destroy');
 
+    Route::post('/admin-kelolaadmin', [KelolaAdminController::class, 'store'])
+        ->name('admin.store');
+
     /*
     |--------------------------------------------------------------------------
     | KELOLA PANITIA (FIXED CONTROLLER)
@@ -113,6 +142,9 @@ Route::middleware('admin')->group(function () {
 
     Route::delete('/admin-kelolapanitia/{id}', [KelolaPanitiaController::class, 'destroy'])
         ->name('panitia.destroy');
+
+    Route::post('/admin-kelolapanitia', [KelolaPanitiaController::class,'store'])
+        ->name('panitia.store');
 
     /*
     |--------------------------------------------------------------------------
@@ -155,6 +187,9 @@ Route::middleware('panitia')->group(function () {
 
     Route::get('/panitia-data-peserta', [PanitiaPesertaController::class, 'index'])
         ->name('panitia.data.peserta');
+
+    Route::get('/panitia-data-peserta/export', [PanitiaPesertaController::class, 'exportCsv'])
+        ->name('panitia.data.peserta.export');
 
     Route::get('/panitia-tutup-sesi', [PanitiaTutupSesiController::class, 'index'])
         ->name('panitia.tutup.sesi');

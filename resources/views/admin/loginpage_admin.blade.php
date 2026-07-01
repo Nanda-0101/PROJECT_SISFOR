@@ -44,7 +44,6 @@
 
                 <div class="logo-container mb-2">
                     <img src="{{ asset('assets/Logo - Unud.png') }}" class="brand-logo" alt="Logo Unud">
-                    <img src="{{ asset('assets/Logo - Informatika.png') }}" class="brand-logo" alt="Logo Informatika">
                 </div>
 
                 <h3 class="brand-title">
@@ -125,12 +124,6 @@
 
                 <div class="forgot-box mt-3">
 
-                    <p class="forgot-text">
-                        Lupa kata sandi?
-                        <a href="#" class="click-here">
-                            Klik di sini
-                        </a>
-                    </p>
 
                 </div>
 

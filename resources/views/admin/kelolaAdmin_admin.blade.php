@@ -80,17 +80,11 @@
             </a>
         </div>
 
-        <div class="sidebar-footer mt-auto d-flex align-items-center gap-3">
-            <div class="sidebar-user-avatar">SA</div>
-            <div class="overflow-hidden">
-                <div class="sidebar-username">Super Admin</div>
-                <div class="sidebar-useremail">admin@siventus.ac.id</div>
-            </div>
-            <a href="{{ route('admin.logout') }}" class="ms-auto m-0 sidebar-logout" title="Keluar">
-                <i class="bi bi-box-arrow-right fs-5" style="color: #EF4444;"></i>
+<div class="sidebar-footer mt-auto">
+            <a href="{{ route('admin.logout') }}" class="btn-logout-sidebar w-100 d-flex justify-content-center align-items-center gap-2" style="text-decoration:none;">
+                <i class="bi bi-box-arrow-right fs-5 text-info"></i> Log Out
             </a>
         </div>
-
     </aside>
 
     <main class="main-content flex-grow-1 d-flex flex-column">
@@ -138,10 +132,6 @@
                 <div class="search-box">
                     <i class="bi bi-search search-icon"></i>
                     <input type="text" id="searchAdmin" class="search-input" placeholder="Cari nama admin...">
-                </div>
-                <div class="d-flex gap-2">
-                    <button class="btn-toolbar"><i class="bi bi-funnel"></i><span>Filter</span></button>
-                    <button class="btn-toolbar"><i class="bi bi-download"></i><span>Export</span></button>
                 </div>
             </div>
 
@@ -196,7 +186,6 @@
                                             <h5 class="modal-title fw-bold">Detail Admin</h5>
                                             <p class="modal-subtitle">Informasi lengkap akun admin</p>
                                         </div>
-                                        <button type="button" class="btn-close btn-close-modal" data-bs-dismiss="modal" aria-label="Tutup"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="mb-3">
@@ -246,6 +235,87 @@
         });
     });
 </script>
+<div class="modal fade" id="modalTambahAdmin" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
 
+            <form action="{{ route('admin.store') }}" method="POST">
+
+                @csrf
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Tambah Admin
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Nama Admin
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nama_admin"
+                            class="form-control"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            name="username"
+                            class="form-control"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control"
+                            required>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Batal
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+                        Simpan
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
 </body>
 </html>

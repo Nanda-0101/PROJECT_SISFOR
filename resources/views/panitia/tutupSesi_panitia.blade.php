@@ -19,31 +19,37 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
 
-        <div class="logo">
-            <h2>{{ session('nama_panitia') }}</h2>
-            <p>Sistem Event Kampus</p>
+        <div class="sidebar-brand">
+            <img src="{{ asset('assets/Logo - SIVENTUS.png') }}" alt="Logo SIVENTUS" class="brand-logo">
+            <div class="brand-text">
+                <h2>{{ session('nama_panitia') }}</h2>
+                <p>Sistem Event Kampus</p>
+            </div>
         </div>
 
-        <ul class="menu">
+        <ul class="menu sidebar-menu">
             <li>
-                <a href="{{ route('panitia.dashboard') }}">
-                    📊 Dashboard
+                <a href="{{ route('panitia.dashboard') }}" class="menu-item">
+                    <span class="menu-icon-wrapper"><i class="bi bi-grid menu-icon"></i></span>
+                    <span class="menu-text">Dashboard</span>
                 </a>
             </li>
-
             <li>
-                <a href="{{ route('panitia.data.peserta') }}">
-                    👥 Data Peserta
+                <a href="{{ route('panitia.data.peserta') }}" class="menu-item">
+                    <span class="menu-icon-wrapper"><i class="bi bi-people menu-icon"></i></span>
+                    <span class="menu-text">Data Peserta</span>
                 </a>
             </li>
-
-            <li class="active">
-                🔒 Tutup Sesi
-            </li>
-
             <li>
-                <a href="{{ route('panitia.logout') }}">
-                    🚪 Logout
+                <a href="{{ route('panitia.tutup.sesi') }}" class="menu-item active">
+                    <span class="menu-icon-wrapper"><i class="bi bi-lock menu-icon"></i></span>
+                    <span class="menu-text">Tutup Sesi</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('panitia.logout') }}" class="menu-item">
+                    <span class="menu-icon-wrapper"><i class="bi bi-box-arrow-right menu-icon"></i></span>
+                    <span class="menu-text">Logout</span>
                 </a>
             </li>
         </ul>

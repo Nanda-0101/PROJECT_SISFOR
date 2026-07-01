@@ -22,7 +22,7 @@
             <div class="content-left">
                 <h2 id="title">
                     Halo <br>
-                    <span style="white-space: nowrap;">panitia 👋</span>
+                    <span style="white-space: nowrap;">Panitia 👋</span>
                 </h2>
 
                 <p id="desc">
@@ -49,7 +49,7 @@
                 </div>
 
                 <h3 class="brand-title">
-                    SIVENPUS - panitia
+                    SIVENPUS - PANITIA
                 </h3>
 
                 <h5 class="welcome-text mt-4">

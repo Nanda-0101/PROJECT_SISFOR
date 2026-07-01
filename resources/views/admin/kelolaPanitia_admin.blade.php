@@ -13,7 +13,7 @@
 <body>
 
 <div class="d-flex min-vh-100 layout-wrapper">
-    {{-- ========== SIDEBAR (tidak diubah) ========== --}}
+    
     <aside class="sidebar d-flex flex-column">
         <div class="sidebar-brand d-flex align-items-center gap-3 mb-5">
             <img src="{{ asset('assets/Logo - SIVENTUS.png') }}" alt="Logo SIVENTUS" class="brand-logo">
@@ -24,42 +24,38 @@
         </div>
         
         <div class="sidebar-menu flex-grow-1">
-            <a href="/admin/dashboard" class="menu-item">
+            <a href="{{ route('admin.dashboard') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Dashboard Panitia.png') }}" alt="Dashboard" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Dashboard Admin</span></div>
             </a>
-            <a href="/admin/buat-event" class="menu-item">
+            <a href="{{ route('admin.buat.event') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Buat Event Siderbar.png') }}" alt="Buat Event" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Buat Event</span></div>
             </a>
-            <a href="/admin/kelola-event" class="menu-item">
+            <a href="{{ route('admin.kelola.event') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Kelola Event.png') }}" alt="Kelola Event" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Kelola Event</span></div>
             </a>
-            <a href="/admin/kelola-panitia" class="menu-item active">
+            <a href="{{ route('admin.kelola.panitia') }}" class="menu-item active">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Kelola Panitia.png') }}" alt="Kelola Panitia" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Kelola Panitia</span></div>
             </a>
-            <a href="/admin/kelola-admin" class="menu-item">
+            <a href="{{ route('admin.kelola.admin') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Kelola Admin.png') }}" alt="Kelola Admin" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Kelola Admin</span></div>
             </a>
-            <a href="/admin/profil" class="menu-item">
+            <a href="{{ route('admin.profil') }}" class="menu-item">
                 <div class="menu-icon-wrapper"><img src="{{ asset('assets/Asset - Profil Panitia.png') }}" alt="Profil Admin" class="menu-icon"></div>
                 <div class="menu-text-wrapper"><span>Profil Admin</span></div>
             </a>
         </div>
 
         <div class="sidebar-footer mt-auto">
-            <form method="POST" action="{{ url('/logout') }}">
-                @csrf
-                <button type="submit" class="btn-logout-sidebar w-100 d-flex justify-content-center align-items-center gap-2">
-                    <i class="bi bi-box-arrow-right fs-5 text-info"></i> Log Out
-                </button>
-            </form>
+            <a href="{{ route('admin.logout') }}" class="btn-logout-sidebar w-100 d-flex justify-content-center align-items-center gap-2" style="text-decoration:none;">
+                <i class="bi bi-box-arrow-right fs-5 text-info"></i> Log Out
+            </a>
         </div>
     </aside>
-    {{-- ========== END SIDEBAR ========== --}}
 
     <main class="content-area flex-grow-1">
 
@@ -74,106 +70,77 @@
             </button>
         </div>
 
+        {{-- Alert Flash Message --}}
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         {{-- Filter & Search --}}
         <div class="filter-bar mb-3">
             <div class="input-search-wrapper">
                 <i class="bi bi-search"></i>
-                <input type="text" class="form-control" placeholder="Cari nama atau email panitia...">
+                <input type="text" id="searchPanitia" class="form-control" placeholder="Cari nama atau username panitia...">
             </div>
             <select class="form-select">
-                <option value="">Semua Divisi</option>
-                <option value="acara">Acara</option>
-                <option value="logistik">Logistik</option>
-                <option value="humas">Humas</option>
-                <option value="publikasi">Publikasi</option>
-                <option value="konsumsi">Konsumsi</option>
+                <option value="">Semua Status</option>
+                <option value="aktif">Anggota Aktif</option>
             </select>
         </div>
 
         {{-- Tabel Panitia --}}
         <div class="data-card bg-white rounded-3 shadow-sm">
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
+                <table class="table table-hover align-middle" id="panitiaTable">
                     <thead>
                         <tr>
                             <th>No</th>
                             <th>Nama Panitia</th>
-                            <th>Email</th>
-                            <th>Divisi</th>
+                            <th>Username</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($panitia ?? [] as $index => $p)
+                        @forelse($panitias as $index => $p)
                         <tr>
                             <td class="row-num">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</td>
                             <td>
                                 <div class="panitia-cell">
                                     <div class="panitia-avatar">
-                                        {{ strtoupper(substr($p->name, 0, 1)) }}{{ strtoupper(substr(strstr($p->name, ' '), 1, 1)) }}
+                                        {{ strtoupper(substr($p->nama_panitia, 0, 2)) }}
                                     </div>
                                     <div>
-                                        <div class="panitia-name">{{ $p->name }}</div>
-                                        <div class="panitia-role">Anggota Aktif</div>
+                                        <div class="panitia-name">{{ $p->nama_panitia }}</div>
+                                        <div class="panitia-role">Panitia Event</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
                                 <span class="email-text">
-                                    <i class="bi bi-envelope me-1" style="color:#CBD5E0;"></i>
-                                    {{ $p->email }}
+                                    <i class="bi bi-person me-1" style="color:#CBD5E0;"></i>
+                                    {{ $p->username }}
                                 </span>
                             </td>
                             <td>
-                                <span class="divisi-badge divisi-{{ strtolower($p->divisi) }}">{{ $p->divisi }}</span>
-                            </td>
-                            <td>
                                 <div class="btn-action-wrap">
-                                    <button class="btn btn-sm btn-outline-info btn-detail" title="Lihat Detail">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-primary btn-edit" title="Edit">
+                                    <button class="btn btn-sm btn-outline-primary btn-edit" title="Edit" onclick="alert('Detail / Username: {{ $p->username }}')">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger btn-delete" title="Hapus">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                    <form action="{{ route('panitia.destroy', $p->id_panitia) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus panitia {{ $p->nama_panitia }}?')" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger btn-delete" title="Hapus">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
                         @empty
-                        {{-- Baris contoh (hapus saat data sudah dari database) --}}
                         <tr>
-                            <td class="row-num">01</td>
-                            <td>
-                                <div class="panitia-cell">
-                                    <div class="panitia-avatar">BS</div>
-                                    <div>
-                                        <div class="panitia-name">Budi Santoso</div>
-                                        <div class="panitia-role">Anggota Aktif</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="email-text">
-                                    <i class="bi bi-envelope me-1" style="color:#CBD5E0;"></i>
-                                    budi@mahasiswa.ac.id
-                                </span>
-                            </td>
-                            <td><span class="divisi-badge divisi-acara">Acara</span></td>
-                            <td>
-                                <div class="btn-action-wrap">
-                                    <button class="btn btn-sm btn-outline-info btn-detail" title="Lihat Detail">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-primary btn-edit" title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger btn-delete" title="Hapus">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
+                            <td colspan="4" class="text-center text-muted py-4">Data panitia tidak tersedia di database.</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -183,39 +150,25 @@
             {{-- Footer Tabel --}}
             <div class="table-footer">
                 <span class="table-footer-info">
-                    Menampilkan {{ isset($panitia) ? $panitia->firstItem() . '–' . $panitia->lastItem() : '1–1' }}
-                    dari {{ isset($panitia) ? $panitia->total() : '1' }} panitia
+                    Total: {{ count($panitias) }} panitia terdaftar
                 </span>
-                @if(isset($panitia) && $panitia->hasPages())
-                <nav>
-                    <ul class="pagination pagination-sm mb-0 gap-1">
-                        <li class="page-item {{ $panitia->onFirstPage() ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ $panitia->previousPageUrl() }}">‹</a>
-                        </li>
-                        @foreach($panitia->getUrlRange(1, $panitia->lastPage()) as $page => $url)
-                        <li class="page-item {{ $page === $panitia->currentPage() ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                        @endforeach
-                        <li class="page-item {{ $panitia->onLastPage() ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ $panitia->nextPageUrl() }}">›</a>
-                        </li>
-                    </ul>
-                </nav>
-                @else
-                <nav>
-                    <ul class="pagination pagination-sm mb-0 gap-1">
-                        <li class="page-item disabled"><a class="page-link" href="#">‹</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="#">›</a></li>
-                    </ul>
-                </nav>
-                @endif
             </div>
         </div>
 
     </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Fitur Live Search untuk Panitia
+    document.getElementById('searchPanitia').addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        document.querySelectorAll('#panitiaTable tbody tr').forEach(row => {
+            if(!row.classList.contains('text-center')) {
+                row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+            }
+        });
+    });
+</script>
 </body>
 </html>

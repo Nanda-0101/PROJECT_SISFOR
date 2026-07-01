@@ -2,10 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| CONTROLLERS
+|--------------------------------------------------------------------------
+*/
+
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminProfilController;
 use App\Http\Controllers\AdminEventController;
 use App\Http\Controllers\AdminKelolaEventController;
+
+use App\Http\Controllers\KelolaAdminController;
+use App\Http\Controllers\KelolaPanitiaController;
 
 use App\Http\Controllers\PanitiaLoginController;
 use App\Http\Controllers\PanitiaDashboardController;
@@ -14,7 +23,7 @@ use App\Http\Controllers\PanitiaTutupSesiController;
 
 /*
 |--------------------------------------------------------------------------
-| PUBLIC
+| PUBLIC ROUTES
 |--------------------------------------------------------------------------
 */
 
@@ -22,37 +31,28 @@ Route::view('/', 'public.landingpage_public');
 
 Route::view('/public-landingpage', 'public.landingpage_public');
 
-Route::view(
-    '/pendaftaran-peserta',
-    'public.pendaftaranPeserta_public'
-);
+Route::view('/pendaftaran-peserta', 'public.pendaftaranPeserta_public');
 
-Route::view(
-    '/cekstatuspendaftaran-peserta',
-    'public.cekStatusPendaftaran_public'
-);
+Route::view('/cekstatuspendaftaran-peserta', 'public.cekStatusPendaftaran_public');
 
 /*
 |--------------------------------------------------------------------------
-| LOGIN ADMIN
+| ADMIN LOGIN
 |--------------------------------------------------------------------------
 */
 
-Route::controller(AdminLoginController::class)->group(function () {
+Route::get('/admin-login', [AdminLoginController::class, 'index'])
+    ->name('admin.login');
 
-    Route::get('/admin-login', 'index')
-        ->name('admin.login');
+Route::post('/admin-login', [AdminLoginController::class, 'login'])
+    ->name('admin.login.submit');
 
-    Route::post('/admin-login', 'login')
-        ->name('admin.login.submit');
-
-    Route::post('/admin-logout', 'logout')
-        ->name('admin.logout');
-});
+Route::get('/admin-logout', [AdminLoginController::class, 'logout'])
+    ->name('admin.logout');
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN
+| ADMIN PANEL (MIDDLEWARE)
 |--------------------------------------------------------------------------
 */
 
@@ -60,77 +60,59 @@ Route::middleware('admin')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Dashboard
+    | DASHBOARD ADMIN
     |--------------------------------------------------------------------------
     */
-
-    Route::view(
-        '/admin-dashboardadmin',
-        'admin.dashboard_admin'
-    )->name('admin.dashboard');
+    Route::view('/admin-dashboardadmin', 'admin.dashboard_admin')
+        ->name('admin.dashboard');
 
     /*
     |--------------------------------------------------------------------------
-    | EVENT
+    | EVENT MANAGEMENT
     |--------------------------------------------------------------------------
     */
 
-    // Form Buat Event
-    Route::get(
-        '/admin-pembuatanevent',
-        [AdminEventController::class, 'create']
-    )->name('admin.buat.event');
+    Route::get('/admin-pembuatanevent', [AdminEventController::class, 'create'])
+        ->name('admin.buat.event');
 
-    // Simpan Event
-    Route::post(
-        '/admin-store-event',
-        [AdminEventController::class, 'store']
-    )->name('admin.store.event');
+    Route::post('/admin-store-event', [AdminEventController::class, 'store'])
+        ->name('admin.store.event');
 
-    // Kelola Event
-    Route::get(
-        '/admin-kelolaevent',
-        [AdminKelolaEventController::class, 'index']
-    )->name('admin.kelola.event');
+    Route::get('/admin-kelolaevent', [AdminKelolaEventController::class, 'index'])
+        ->name('admin.kelola.event');
 
-    // Update Event (Modal Edit)
-    Route::put(
-        '/admin/event/{id}',
-        [AdminKelolaEventController::class, 'update']
-    )->name('admin.update.event');
+    Route::put('/admin/event/{id}', [AdminKelolaEventController::class, 'update'])
+        ->name('admin.update.event');
 
-    // Delete Event
-    Route::delete(
-        '/admin/event/{id}',
-        [AdminKelolaEventController::class, 'destroy']
-    )->name('admin.delete.event');
+    Route::delete('/admin/event/{id}', [AdminKelolaEventController::class, 'destroy'])
+        ->name('admin.delete.event');
 
-    // Tandai Event Selesai
-    Route::put('/admin/event/complete/{id}',
-        [AdminKelolaEventController::class, 'complete']
-        )->name('admin.complete.event');
+    Route::put('/admin/event/complete/{id}', [AdminKelolaEventController::class, 'complete'])
+        ->name('admin.complete.event');
 
     /*
     |--------------------------------------------------------------------------
-    | KELOLA ADMIN
+    | KELOLA ADMIN (FIXED CONTROLLER)
     |--------------------------------------------------------------------------
     */
 
-    Route::view(
-        '/admin-kelolaadmin',
-        'admin.kelolaAdmin_admin'
-    )->name('admin.kelola.admin');
+    Route::get('/admin-kelolaadmin', [KelolaAdminController::class, 'index'])
+        ->name('admin.kelola.admin');
+
+    Route::delete('/admin-kelolaadmin/{id}', [KelolaAdminController::class, 'destroy'])
+        ->name('admin.destroy');
 
     /*
     |--------------------------------------------------------------------------
-    | KELOLA PANITIA
+    | KELOLA PANITIA (FIXED CONTROLLER)
     |--------------------------------------------------------------------------
     */
 
-    Route::view(
-        '/admin-kelolapanitia',
-        'admin.kelolaPanitia_admin'
-    )->name('admin.kelola.panitia');
+    Route::get('/admin-kelolapanitia', [KelolaPanitiaController::class, 'index'])
+        ->name('admin.kelola.panitia');
+
+    Route::delete('/admin-kelolapanitia/{id}', [KelolaPanitiaController::class, 'destroy'])
+        ->name('panitia.destroy');
 
     /*
     |--------------------------------------------------------------------------
@@ -138,65 +120,56 @@ Route::middleware('admin')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get(
-        '/admin-profiladmin',
-        [AdminProfilController::class, 'index']
-    )->name('admin.profil');
+    Route::get('/admin-profiladmin', [AdminProfilController::class, 'index'])
+        ->name('admin.profil');
 
-    Route::post(
-        '/admin-profiladmin',
-        [AdminProfilController::class, 'update']
-    )->name('admin.profil.update');
+    Route::post('/admin-profiladmin', [AdminProfilController::class, 'update'])
+        ->name('admin.profil.update');
 });
 
 /*
 |--------------------------------------------------------------------------
-| LOGIN PANITIA
+| PANITIA LOGIN
 |--------------------------------------------------------------------------
 */
 
-Route::controller(PanitiaLoginController::class)->group(function () {
+Route::get('/panitia-login', [PanitiaLoginController::class, 'index'])
+    ->name('panitia.login');
 
-    Route::get('/panitia-login', 'index')
-        ->name('panitia.login');
+Route::post('/panitia-login', [PanitiaLoginController::class, 'login'])
+    ->name('panitia.login.submit');
 
-    Route::post('/panitia-login', 'login')
-        ->name('panitia.login.submit');
-
-    Route::get('/panitia-logout', 'logout')
-        ->name('panitia.logout');
-});
+Route::get('/panitia-logout', [PanitiaLoginController::class, 'logout'])
+    ->name('panitia.logout');
 
 /*
 |--------------------------------------------------------------------------
-| PANITIA
+| PANITIA PANEL (MIDDLEWARE)
 |--------------------------------------------------------------------------
 */
 
 Route::middleware('panitia')->group(function () {
 
-    Route::get(
-        '/panitia-dashboard',
-        [PanitiaDashboardController::class, 'index']
-    )->name('panitia.dashboard');
+    Route::get('/panitia-dashboard', [PanitiaDashboardController::class, 'index'])
+        ->name('panitia.dashboard');
 
-    Route::get(
-        '/panitia-data-peserta',
-        [PanitiaPesertaController::class, 'index']
-    )->name('panitia.data.peserta');
+    Route::get('/panitia-data-peserta', [PanitiaPesertaController::class, 'index'])
+        ->name('panitia.data.peserta');
 
-    Route::get(
-        '/panitia-tutup-sesi',
-        [PanitiaTutupSesiController::class, 'index']
-    )->name('panitia.tutup.sesi');
+    Route::get('/panitia-tutup-sesi', [PanitiaTutupSesiController::class, 'index'])
+        ->name('panitia.tutup.sesi');
 
-    Route::post(
-        '/panitia/tutup-sesi/{id}',
-        [PanitiaTutupSesiController::class, 'tutupSesi']
-    )->name('panitia.tutup.sesi.proses');
+    Route::post('/panitia/tutup-sesi/{id}', [PanitiaTutupSesiController::class, 'tutupSesi'])
+        ->name('panitia.tutup.sesi.proses');
 
-    Route::view(
-        '/panitia-profil',
-        'panitia.profil_panitia'
-    )->name('panitia.profil');
+    Route::view('/panitia-profil', 'panitia.profil_panitia')
+        ->name('panitia.profil');
 });
+
+/*
+|--------------------------------------------------------------------------
+| REDIRECT ROOT
+|--------------------------------------------------------------------------
+*/
+
+Route::redirect('/', '/public-landingpage');

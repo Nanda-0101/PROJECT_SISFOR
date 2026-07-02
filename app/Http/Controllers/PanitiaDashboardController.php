@@ -78,12 +78,14 @@ class PanitiaDashboardController extends Controller
             ->where('event.created_by', $idPanitia)
             ->select(
                 'event.nama_event',
+                'event.tanggal_event',
                 DB::raw('SUM(sesi.kuota_maksimal) as kuota'),
                 DB::raw('COUNT(pendaftaran.id_pendaftaran) as peserta')
             )
             ->groupBy(
                 'event.id_event',
-                'event.nama_event'
+                'event.nama_event',
+                'event.tanggal_event'
             )
             ->get();
 

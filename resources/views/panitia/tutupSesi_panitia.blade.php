@@ -98,6 +98,20 @@
                 <h3>List Sesi Event</h3>
             </div>
 
+            <div class="filter-box">
+                <form method="GET" action="{{ route('panitia.tutup.sesi') }}">
+                    <label for="event_id">Event</label>
+                    <select name="event_id" id="event_id" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Semua Event</option>
+                        @foreach($events as $event)
+                            <option value="{{ $event->id_event }}" {{ $selectedEvent == $event->id_event ? 'selected' : '' }}>
+                                {{ $event->nama_event }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+
             @forelse($sesis as $sesi)
 
                 @php
@@ -112,7 +126,10 @@
 
                         <div>
 
-                            <h4>{{ $sesi->nama_sesi }}</h4>
+                            <div class="sesi-title-row">
+                                <span class="event-badge">{{ $sesi->nama_event }}</span>
+                                <h4>{{ $sesi->nama_sesi }}</h4>
+                            </div>
 
                             <small>
                                 {{ \Carbon\Carbon::parse($sesi->waktu_mulai)->format('d M Y H:i') }}

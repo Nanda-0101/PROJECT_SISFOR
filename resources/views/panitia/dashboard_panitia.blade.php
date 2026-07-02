@@ -157,7 +157,12 @@
 
                     <div class="event-header">
 
-                        <span>{{ $event->nama_event }}</span>
+                        <div>
+                            <span>{{ $event->nama_event }}</span>
+                            <div style="font-size: 0.85rem; color: #666; margin-top: 2px;">
+                                {{ $event->tanggal_event ? date('d M Y', strtotime($event->tanggal_event)) : '-' }}
+                            </div>
+                        </div>
 
                         <strong>
                             {{ $event->peserta }} / {{ $event->kuota }}

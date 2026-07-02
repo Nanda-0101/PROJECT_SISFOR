@@ -2,23 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PanitiaTutupSesiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $idPanitia = session('id_panitia');
         
         if (!$idPanitia) {
             return redirect()->route('panitia.login');
-            }
+        }
 
-            $sesis = DB::table('sesi')
+        $selectedEvent = $request->query('event_id');
+
+        $events = DB::table('event')
+            ->where('created_by', $idPanitia)
+            ->orderBy('nama_event')
+            ->get();
+
+        $sesis = DB::table('sesi')
             ->join('event', 'sesi.id_event', '=', 'event.id_event')
             ->leftJoin('pendaftaran', 'sesi.id_sesi', '=', 'pendaftaran.id_sesi')
             ->leftJoin('peserta', 'pendaftaran.id_pendaftaran', '=', 'peserta.id_pendaftaran')
             ->where('event.created_by', $idPanitia)
+            ->when($selectedEvent, function ($query, $selectedEvent) {
+                return $query->where('event.id_event', $selectedEvent);
+            })
             ->select(
                 'sesi.id_sesi',
                 'sesi.nama_sesi',
@@ -26,6 +37,7 @@ class PanitiaTutupSesiController extends Controller
                 'sesi.waktu_selesai',
                 'sesi.kuota_maksimal',
                 'sesi.status_sesi',
+                'event.id_event',
                 'event.nama_event',
                 DB::raw('COUNT(peserta.id_peserta) as jumlah_peserta')
             )
@@ -36,12 +48,13 @@ class PanitiaTutupSesiController extends Controller
                 'sesi.waktu_selesai',
                 'sesi.kuota_maksimal',
                 'sesi.status_sesi',
+                'event.id_event',
                 'event.nama_event'
             )
             ->orderBy('sesi.waktu_mulai')
             ->get();
 
-        return view('panitia.tutupSesi_panitia', compact('sesis'));
+        return view('panitia.tutupSesi_panitia', compact('sesis', 'events', 'selectedEvent'));
     }
     public function tutupSesi($id)
     {

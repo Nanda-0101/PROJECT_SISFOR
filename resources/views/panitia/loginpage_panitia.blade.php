@@ -55,7 +55,9 @@
                 <h5 class="welcome-text mt-4">
                     Selamat Datang!
                 </h5>
-
+                  <p class="info-text">
+                    Silakan login menggunakan akun Panitia.
+                </p>
                 <form method="POST" action="{{ route('panitia.login.submit') }}">
                     @csrf
 

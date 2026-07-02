@@ -353,8 +353,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // window.location.href = '/admin/buat-event';
         });
     }
-    document.getElementById('completeForm').action =
-    "{{ url('/admin/event/complete') }}/" + id;
 });
 </script>
 

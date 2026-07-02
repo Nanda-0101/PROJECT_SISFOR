@@ -1,3 +1,8 @@
+html {
+    overflow-y: scroll; /* fallback: selalu sediakan ruang scrollbar */
+    scrollbar-gutter: stable; /* ruang scrollbar dikunci, tidak "mencuri" lebar saat muncul */
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #F4F6F9;
@@ -12,6 +17,11 @@ body {
 /* --- SIDEBAR STYLE --- */
 .sidebar {
     width: 320px;
+    flex-shrink: 0; /* Mencegah sidebar ikut menyusut saat konten sebelah melebar (mis. tabel lebar) */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
     background-color: #05060F;
     display: flex;
     flex-direction: column;
@@ -133,6 +143,8 @@ body {
 /* --- MAIN CONTENT STYLE --- */
 .content-area {
     padding: 40px;
+    min-width: 0; /* Agar konten (tabel dsb) yang menyesuaikan/scroll, bukan sidebar yang tertekan */
+    flex: 1 1 auto;
 }
 
 .welcome-banner {
@@ -197,4 +209,15 @@ body {
     font-size: 22px;
     margin: 0;
     letter-spacing: 0.5px;
+}
+
+/* --- RESPONSIVE SIDEBAR (berlaku untuk semua halaman admin) --- */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .content-area {
+        padding: 20px 16px;
+    }
 }

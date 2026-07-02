@@ -60,11 +60,7 @@
     </aside>
     {{-- ========== END SIDEBAR ========== --}}
 
-<div class="sidebar-footer mt-auto">
-            <a href="{{ route('admin.logout') }}" class="btn-logout-sidebar w-100 d-flex justify-content-center align-items-center gap-2" style="text-decoration:none;">
-                <i class="bi bi-box-arrow-right fs-5 text-info"></i> Log Out
-            </a>
-        </div>
+
     </aside>
 
     <main class="main-content flex-grow-1 d-flex flex-column">

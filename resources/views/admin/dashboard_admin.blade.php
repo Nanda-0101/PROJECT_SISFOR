@@ -131,7 +131,7 @@
             </div>
 
             <div class="col-md-6">
-                <a href="{{ route('admin.kelola.event') }}" class="card-link">
+                <a href="{{ route('admin.kelola.admin') }}" class="card-link">
                     <div class="action-card" id="card-kelola-kategori">
                         <div class="card-icon">
                             <img src="{{ asset('assets/Asset - Kelola Kategori.png') }}" class="card-custom-icon">
@@ -147,7 +147,7 @@
                         <div class="card-icon">
                             <img src="{{ asset('assets/Asset - Kelola Sesi.png') }}" class="card-custom-icon">
                         </div>
-                        <h3 class="card-title">Kelola Sesi</h3>
+                        <h3 class="card-title">Kelola Event</h3>
                     </div>
                 </a>
             </div>
@@ -158,7 +158,7 @@
                         <div class="card-icon">
                             <img src="{{ asset('assets/Asset - Kelola User.png') }}" class="card-custom-icon">
                         </div>
-                        <h3 class="card-title">Kelola User</h3>
+                        <h3 class="card-title">Kelola Panitia</h3>
                     </div>
                 </a>
             </div>

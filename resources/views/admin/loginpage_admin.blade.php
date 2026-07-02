@@ -47,7 +47,7 @@
                 </div>
 
                 <h3 class="brand-title">
-                    SIVENPUS
+                    SIVENPUS - ADMIN
                 </h3>
 
                 <h5 class="welcome-text mt-4">

@@ -155,22 +155,11 @@
                                 @endif
                             </td>
                             <td>
-                                @switch($event->status_event)
-                                    @case('draft')
-                                        <span class="badge bg-secondary">Draft</span>
-                                        @break
-                                    @case('publikasi')
-                                        <span class="badge bg-success">Publikasi</span>
-                                        @break
-                                    @case('selesai')
-                                        <span class="badge bg-primary">Selesai</span>
-                                        @break
-                                    @case('dibatalkan')
-                                        <span class="badge bg-danger">Dibatalkan</span>
-                                        @break
-                                    @default
-                                        <span class="badge bg-secondary">{{ $event->status_event }}</span>
-                                @endswitch
+                                @if($event->status_event == 'publikasi')
+                                    <span class="badge bg-success">Publikasi</span>
+                                @else
+                                    <span class="badge bg-secondary">{{ ucfirst($event->status_event) }}</span>
+                                @endif
                             </td>
                             <td>
                                 @if($event->panitia)
@@ -183,22 +172,22 @@
                             </td>
                             <td>
                                 <div class="btn-action-wrap">
-                                    {{-- Tombol Selesai --}}
-                                    @if($event->status_event != 'selesai')
-                                        <button type="button"
-                                                class="btn btn-sm btn-outline-success btn-complete"
-                                                title="Tandai Selesai"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#completeModal"
-                                                data-id="{{ $event->id_event }}"
-                                                data-nama="{{ $event->nama_event }}">
-                                            <i class="bi bi-check2-circle"></i>
-                                        </button>
-                                    @else
-                                        <span class="badge bg-primary text-white px-3 py-2">
-                                            <i class="bi bi-check-circle me-1"></i> Selesai
-                                        </span>
-                                    @endif
+                                    {{-- Tombol Edit --}}
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-primary btn-edit"
+                                            title="Edit Event"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editModal"
+                                            data-id="{{ $event->id_event }}"
+                                            data-nama="{{ $event->nama_event }}"
+                                            data-deskripsi="{{ $event->deskripsi }}"
+                                            data-tanggal="{{ $event->tanggal_event }}"
+                                            data-lokasi="{{ $event->lokasi }}"
+                                            data-jenis="{{ $event->jenis_event }}"
+                                            data-biaya="{{ $event->biaya }}"
+                                            data-panitia="{{ $event->created_by }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
 
                                     {{-- Tombol Delete --}}
                                     <button type="button"
@@ -252,6 +241,96 @@
 </div>
 
 {{-- ============================================================ --}}
+{{-- MODAL EDIT --}}
+{{-- ============================================================ --}}
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="editForm" method="POST" action="">
+                @csrf
+                @method('PUT')
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square me-2"></i> Edit Event
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    {{-- Nama Event --}}
+                    <div class="mb-3">
+                        <label class="form-label">Nama Event <span class="text-danger">*</span></label>
+                        <input type="text" name="nama_event" id="editNama" class="form-control" required>
+                    </div>
+
+                    {{-- Deskripsi --}}
+                    <div class="mb-3">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea name="deskripsi" id="editDeskripsi" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    {{-- Tanggal & Lokasi --}}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tanggal Event <span class="text-danger">*</span></label>
+                            <input type="date" name="tanggal_event" id="editTanggal" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Lokasi <span class="text-danger">*</span></label>
+                            <input type="text" name="lokasi" id="editLokasi" class="form-control" required>
+                        </div>
+                    </div>
+
+                    {{-- Jenis Event & Biaya --}}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Jenis Event <span class="text-danger">*</span></label>
+                            <select name="jenis_event" id="editJenis" class="form-select">
+                                <option value="gratis">Gratis</option>
+                                <option value="berbayar">Berbayar</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Biaya</label>
+                            <input type="number" name="biaya" id="editBiaya" class="form-control" min="0" step="1000">
+                            <small class="text-muted">Kosongkan jika gratis</small>
+                        </div>
+                    </div>
+
+                    {{-- Panitia --}}
+                    <div class="mb-3">
+                        <label class="form-label">Panitia Penanggung Jawab <span class="text-danger">*</span></label>
+                        <select name="created_by" id="editPanitia" class="form-select" required>
+                            <option value="">Pilih Panitia</option>
+                            @foreach($panitia as $item)
+                                <option value="{{ $item->id_panitia }}">
+                                    {{ $item->nama_panitia }} ({{ $item->username }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Informasi Status (Readonly) --}}
+                    <div class="mb-3">
+                        <label class="form-label">Status Event</label>
+                        <input type="text" class="form-control" value="Publikasi (Otomatis)" readonly style="background: #e9ecef; color: #10b981; font-weight: 600;">
+                        <small class="text-muted"><i class="bi bi-info-circle"></i> Status akan otomatis menjadi Publikasi</small>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-2"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- ============================================================ --}}
 {{-- MODAL DELETE --}}
 {{-- ============================================================ --}}
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
@@ -278,40 +357,34 @@
 </div>
 
 {{-- ============================================================ --}}
-{{-- MODAL COMPLETE (Tandai Selesai) --}}
-{{-- ============================================================ --}}
-<div class="modal fade" id="completeModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Tandai Event Selesai</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Apakah Anda yakin ingin menandai event <strong id="completeEventName"></strong> sebagai <strong>SELESAI</strong>?</p>
-                <p class="text-warning"><small>Status event akan berubah menjadi <strong>Selesai</strong> dan tidak dapat diubah kembali.</small></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <form id="completeForm" method="POST" action="">
-                    @csrf
-                    @method('PUT')
-                    <button type="submit" class="btn btn-success">
-                        <i class="bi bi-check2-circle me-2"></i> Ya, Selesai
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-{{-- ============================================================ --}}
 {{-- SCRIPT --}}
 {{-- ============================================================ --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
     console.log('Halaman Kelola Event Berhasil Dimuat! 📅');
+
+    //------------------------------------
+    // EDIT MODAL
+    //------------------------------------
+    const editModal = document.getElementById('editModal');
+    if (editModal) {
+        editModal.addEventListener('show.bs.modal', function (event) {
+            const btn = event.relatedTarget;
+
+            // Set action form
+            document.getElementById('editForm').action = '/admin/event/' + btn.dataset.id;
+
+            // Isi field dengan data dari button
+            document.getElementById('editNama').value = btn.dataset.nama || '';
+            document.getElementById('editDeskripsi').value = btn.dataset.deskripsi || '';
+            document.getElementById('editTanggal').value = btn.dataset.tanggal || '';
+            document.getElementById('editLokasi').value = btn.dataset.lokasi || '';
+            document.getElementById('editJenis').value = btn.dataset.jenis || 'gratis';
+            document.getElementById('editBiaya').value = btn.dataset.biaya || 0;
+            document.getElementById('editPanitia').value = btn.dataset.panitia || '';
+        });
+    }
 
     //------------------------------------
     // DELETE MODAL
@@ -329,29 +402,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     //------------------------------------
-    // COMPLETE MODAL (Tandai Selesai)
-    //------------------------------------
-    const completeModal = document.getElementById('completeModal');
-    if (completeModal) {
-        completeModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const id = button.getAttribute('data-id');
-            const nama = button.getAttribute('data-nama');
-
-            document.getElementById('completeEventName').textContent = nama;
-            document.getElementById('completeForm').action = '/admin/event/complete/' + id;
-        });
-    }
-
-    //------------------------------------
     // TOMBOL TAMBAH EVENT
     //------------------------------------
     const btnTambah = document.getElementById('btn-tambah-event');
     if (btnTambah) {
         btnTambah.addEventListener('click', function () {
             console.log('Navigasi ke form tambah event...');
-            // window.location.href = '/admin/buat-event';
         });
+    }
+
+    //------------------------------------
+    // TOGGLE BIAYA BERDASARKAN JENIS EVENT
+    //------------------------------------
+    const editJenis = document.getElementById('editJenis');
+    const editBiaya = document.getElementById('editBiaya');
+
+    function toggleBiaya() {
+        if (editJenis.value === 'gratis') {
+            editBiaya.value = 0;
+            editBiaya.readOnly = true;
+            editBiaya.style.backgroundColor = '#e9ecef';
+        } else {
+            editBiaya.readOnly = false;
+            editBiaya.style.backgroundColor = '';
+        }
+    }
+
+    if (editJenis) {
+        editJenis.addEventListener('change', toggleBiaya);
+        // Jalankan saat modal pertama kali terbuka
+        const observer = new MutationObserver(function() {
+            if (editModal.classList.contains('show')) {
+                toggleBiaya();
+            }
+        });
+        observer.observe(editModal, { attributes: true, attributeFilter: ['class'] });
     }
 });
 </script>

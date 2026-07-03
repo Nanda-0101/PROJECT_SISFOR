@@ -9,23 +9,284 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <style>
-        .filter-bar{
-            display:flex;
-            gap:20px;
-            align-items:center;
-            margin-bottom:20px;
-            flex-wrap:wrap;
+        /* ============================================================ */
+        /* FILTER BAR */
+        /* ============================================================ */
+        .filter-bar {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
         }
 
-        .filter-item{
-            display:flex;
-            align-items:center;
-            gap:8px;
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .filter-item select{
-            padding:8px 12px;
-            border-radius:8px;
+        .filter-item label {
+            font-weight: 600;
+            font-size: 13px;
+            color: #475569;
+            margin-bottom: 0;
+        }
+
+        .filter-item select {
+            padding: 8px 14px;
+            border-radius: 10px;
+            border: 1.5px solid #e2e8f0;
+            background: white;
+            font-size: 13px;
+            color: #1e293b;
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-item select:focus {
+            border-color: #4F39F6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 57, 246, 0.1);
+        }
+
+        .filter-item select:hover {
+            border-color: #4F39F6;
+        }
+
+        .total-badge {
+            background: #4F39F6;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        /* ============================================================ */
+        /* TABLE HEADER - EXPORT BUTTONS */
+        /* ============================================================ */
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .table-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0;
+        }
+
+        .btn-export-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-export {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-export::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .btn-export:hover::before {
+            left: 100%;
+        }
+
+        .btn-export i {
+            font-size: 16px;
+        }
+
+        /* ============================================================ */
+        /* EXPORT PDF - RED */
+        /* ============================================================ */
+        .btn-export-pdf {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-export-pdf:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+            color: white;
+        }
+
+        .btn-export-pdf:active {
+            transform: translateY(0);
+        }
+
+        /* ============================================================ */
+        /* EXPORT EXCEL - GREEN */
+        /* ============================================================ */
+        .btn-export-csv {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-export-csv:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            color: white;
+        }
+
+        .btn-export-csv:active {
+            transform: translateY(0);
+        }
+
+        /* ============================================================ */
+        /* TABLE STYLING */
+        /* ============================================================ */
+        .table-box {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .table-box table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .table-box table thead th {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table-box table tbody td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #1e293b;
+        }
+
+        .table-box table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .table-box table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-box table tbody td strong {
+            color: #4F39F6;
+            font-weight: 600;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* ============================================================ */
+        /* RESPONSIVE */
+        /* ============================================================ */
+        @media (max-width: 768px) {
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-export-group {
+                flex-wrap: wrap;
+            }
+
+            .btn-export {
+                flex: 1;
+                justify-content: center;
+                min-width: 120px;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-item select {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .total-badge {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .table-box {
+                padding: 15px;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn-export {
+                font-size: 12px;
+                padding: 8px 14px;
+            }
+
+            .btn-export i {
+                font-size: 14px;
+            }
+
+            .table-box table {
+                font-size: 12px;
+            }
+
+            .table-box table thead th,
+            .table-box table tbody td {
+                padding: 8px 10px;
+            }
         }
     </style>
 
@@ -105,17 +366,30 @@
 
             <div class="table-header">
 
-                <h3>Data Peserta</h3>
+                <h3>
+                    <i class="bi bi-people-fill me-2" style="color: #4F39F6;"></i>
+                    Data Peserta
+                </h3>
 
-                <<a href="{{ route('panitia.data.peserta.export', request()->query()) }}"
-                    class="export-btn">
-                    ⬇ Export Excel
-                </a>
+                <div class="btn-export-group">
+                    {{-- Export PDF --}}
+                    <a href="{{ route('panitia.data.peserta.export-pdf', request()->query()) }}"
+                       class="btn-export btn-export-pdf" target="_blank">
+                        <i class="bi bi-filetype-pdf"></i>
+                        <span>Export PDF</span>
+                    </a>
+
+                    {{-- Export CSV --}}
+                    <a href="{{ route('panitia.data.peserta.export', request()->query()) }}"
+                       class="btn-export btn-export-csv">
+                        <i class="bi bi-file-earmark-excel"></i>
+                        <span>Export Excel</span>
+                    </a>
+                </div>
 
             </div>
 
             <!-- FILTER -->
-
             <form
                 method="GET"
                 action="{{ route('panitia.data.peserta') }}"
@@ -125,7 +399,9 @@
 
                     <div class="filter-item">
 
-                        <label>Event</label>
+                        <label>
+                            <i class="bi bi-calendar-event me-1"></i> Event
+                        </label>
 
                         <select
                             name="event"
@@ -151,133 +427,117 @@
 
                     </div>
 
-                    <div class="filter-item">
 
-                        <label>Sesi</label>
-
-                        <select
-                            name="sesi"
-                            onchange="document.getElementById('formFilter').submit()">
-
-                            <option value="">
-                                Semua Sesi
-                            </option>
-
-                            @foreach($sesiList as $sesi)
-
-                                <option
-                                    value="{{ $sesi->id_sesi }}"
-                                    {{ request('sesi') == $sesi->id_sesi ? 'selected' : '' }}>
-
-                                    {{ $sesi->nama_sesi }}
-
-                                </option>
-
-                            @endforeach
-
-                        </select>
-
-                    </div>
+                    <span class="total-badge">
+                        <i class="bi bi-people me-1"></i>
+                        {{ $peserta->count() }} Peserta
+                    </span>
 
                 </div>
 
             </form>
 
             <!-- TABLE -->
+            <div class="table-responsive">
+                <table>
 
-            <table>
+                    <thead>
 
-                <thead>
+                        <tr>
 
-                    <tr>
+                            <th>NIM</th>
 
-                        <th>NIM</th>
+                            <th>Nama Lengkap</th>
 
-                        <th>Nama Lengkap</th>
+                            <th>Email</th>
 
-                        <th>Email</th>
+                            <th>No. WA</th>
 
-                        <th>No. WA</th>
+                            <th>Event</th>
 
-                        <th>Event</th>
+                            <th>Kategori</th>
 
-                        <th>Kategori</th>
+                            <th>Sesi</th>
 
-                        <th>Sesi</th>
+                            <th>Waktu Daftar</th>
 
-                        <th>Waktu Daftar</th>
+                        </tr>
 
-                    </tr>
+                    </thead>
 
-                </thead>
+                    <tbody>
 
-                <tbody>
+                    @forelse($peserta as $p)
 
-                @forelse($peserta as $p)
+                        <tr>
 
-                    <tr>
+                            <td>
+                                <strong>{{ $p->nim }}</strong>
+                            </td>
 
-                        <td>
-                            <strong>{{ $p->nim }}</strong>
-                        </td>
+                            <td>
+                                {{ $p->nama_lengkap }}
+                            </td>
 
-                        <td>
-                            {{ $p->nama_lengkap }}
-                        </td>
+                            <td>
+                                <a href="mailto:{{ $p->email }}" style="color: #4F39F6; text-decoration: none;">
+                                    {{ $p->email }}
+                                </a>
+                            </td>
 
-                        <td>
-                            {{ $p->email }}
-                        </td>
+                            <td>
+                                <a href="tel:{{ $p->no_wa }}" style="color: #1e293b; text-decoration: none;">
+                                    {{ $p->no_wa ?? '-' }}
+                                </a>
+                            </td>
 
-                        <td>
-                            {{ $p->no_wa ?? '-' }}
-                        </td>
+                            <td>
+                                {{ $p->nama_event }}
+                            </td>
 
-                        <td>
-                            {{ $p->nama_event }}
-                        </td>
+                            <td>
 
-                        <td>
+                                <span class="status">
 
-                            <span class="status">
+                                    {{ $p->nama_kategori }}
 
-                                {{ $p->nama_kategori }}
+                                </span>
 
-                            </span>
+                            </td>
 
-                        </td>
+                            <td>
+                                {{ $p->nama_sesi }}
+                            </td>
 
-                        <td>
-                            {{ $p->nama_sesi }}
-                        </td>
+                            <td style="font-size: 12px; color: #64748b;">
 
-                        <td>
+                                {{ \Carbon\Carbon::parse($p->waktu_daftar)->format('d-m-Y H:i') }}
 
-                            {{ \Carbon\Carbon::parse($p->waktu_daftar)->format('d-m-Y H:i') }}
+                            </td>
 
-                        </td>
+                        </tr>
 
-                    </tr>
+                    @empty
 
-                @empty
+                        <tr>
 
-                    <tr>
+                            <td
+                                colspan="8"
+                                style="text-align:center;padding:35px;color:#64748b;">
 
-                        <td
-                            colspan="8"
-                            style="text-align:center;padding:35px;color:#64748b;">
+                                <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                                Belum ada peserta pada event Anda.
 
-                            Belum ada peserta pada event Anda.
+                            </td>
 
-                        </td>
+                        </tr>
 
-                    </tr>
+                    @endforelse
 
-                @endforelse
+                    </tbody>
 
-                </tbody>
-
-            </table>
+                </table>
+            </div>
 
         </div>
 

@@ -191,6 +191,9 @@ Route::middleware('panitia')->group(function () {
     Route::get('/panitia-data-peserta/export', [PanitiaPesertaController::class, 'exportCsv'])
         ->name('panitia.data.peserta.export');
 
+    Route::get('/panitia-data-peserta/export-pdf', [PanitiaPesertaController::class, 'exportPdf'])
+        ->name('panitia.data.peserta.export-pdf');
+
     Route::get('/panitia-tutup-sesi', [PanitiaTutupSesiController::class, 'index'])
         ->name('panitia.tutup.sesi');
 

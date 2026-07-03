@@ -20,14 +20,12 @@ class AdminKelolaEventController extends Controller
 
         $totalEvent  = Event::count();
         $eventAktif  = Event::where('status_event', 'publikasi')->count();
-        $eventDraft  = Event::where('status_event', 'draft')->count();
 
         return view('admin.kelolaEvent_admin', compact(
             'events',
             'panitia',
             'totalEvent',
-            'eventAktif',
-            'eventDraft'
+            'eventAktif'
         ));
     }
 
@@ -40,7 +38,6 @@ class AdminKelolaEventController extends Controller
             'lokasi'        => 'required|string|max:255',
             'jenis_event'   => 'required|in:gratis,berbayar',
             'biaya'         => 'nullable|numeric|min:0',
-            'status_event'  => 'required|in:draft,publikasi,selesai,dibatalkan',
             'created_by'    => 'required|exists:panitia,id_panitia',
         ]);
 
@@ -55,19 +52,20 @@ class AdminKelolaEventController extends Controller
             'biaya'         => $request->jenis_event == 'gratis'
                                 ? 0
                                 : ($request->biaya ?? 0),
-            'status_event'  => $request->status_event,
+            'status_event'  => 'publikasi', // Otomatis publikasi
             'created_by'    => $request->created_by,
-            'updated_by'    => session('admin_id'),
+            'updated_by'    => session('id_admin'),
         ]);
 
         return redirect()
             ->route('admin.kelola.event')
-            ->with('success', 'Event berhasil diperbarui.');
+            ->with('success', 'Event "' . $event->nama_event . '" berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
         $event = Event::with('sesi.pendaftaran')->findOrFail($id);
+        $nama = $event->nama_event;
 
         foreach ($event->sesi as $sesi) {
             $sesi->pendaftaran()->delete();
@@ -78,18 +76,6 @@ class AdminKelolaEventController extends Controller
 
         return redirect()
             ->route('admin.kelola.event')
-            ->with('success', 'Event berhasil dihapus.');
-    }
-    public function complete($id)
-    {
-        $event = Event::findOrFail($id);
-
-        $event->update([
-            'status_event' => 'selesai'
-        ]);
-
-        return redirect()
-            ->route('admin.kelola.event')
-            ->with('success', 'Event berhasil diselesaikan.');
+            ->with('success', 'Event "' . $nama . '" berhasil dihapus.');
     }
 }

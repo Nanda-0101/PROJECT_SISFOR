@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PanitiaPesertaController extends Controller
 {
@@ -14,35 +15,26 @@ class PanitiaPesertaController extends Controller
     private function pesertaQuery($idPanitia, Request $request)
     {
         $query = DB::table('pendaftaran')
-
             ->join('peserta', 'pendaftaran.id_pendaftaran', '=', 'peserta.id_pendaftaran')
-
             ->join('sesi', 'pendaftaran.id_sesi', '=', 'sesi.id_sesi')
-
             ->join('event', 'sesi.id_event', '=', 'event.id_event')
-
             ->join('kategori_peserta', 'sesi.id_kategori', '=', 'kategori_peserta.id_kategori')
-
             ->leftJoin('data_peserta as nim', function ($join) {
                 $join->on('peserta.id_peserta', '=', 'nim.id_peserta')
                     ->where('nim.id_field', 1);
             })
-
             ->leftJoin('data_peserta as nama', function ($join) {
                 $join->on('peserta.id_peserta', '=', 'nama.id_peserta')
                     ->where('nama.id_field', 2);
             })
-
             ->leftJoin('data_peserta as email', function ($join) {
                 $join->on('peserta.id_peserta', '=', 'email.id_peserta')
                     ->where('email.id_field', 3);
             })
-
             ->leftJoin('data_peserta as wa', function ($join) {
                 $join->on('peserta.id_peserta', '=', 'wa.id_peserta')
                     ->where('wa.id_field', 4);
             })
-
             ->where('event.created_by', $idPanitia);
 
         if ($request->filled('event')) {
@@ -115,21 +107,11 @@ class PanitiaPesertaController extends Controller
         ];
 
         return response()->stream(function () use ($peserta) {
-
             $file = fopen('php://output', 'w');
-
-            // UTF-8 BOM agar Excel tidak rusak
             fwrite($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
-
             fputcsv($file, [
-                'NIM',
-                'Nama Lengkap',
-                'Email',
-                'No. WA',
-                'Event',
-                'Kategori',
-                'Sesi',
-                'Waktu Daftar'
+                'NIM', 'Nama Lengkap', 'Email', 'No. WA',
+                'Event', 'Kategori', 'Sesi', 'Waktu Daftar'
             ]);
 
             foreach ($peserta as $row) {
@@ -144,9 +126,55 @@ class PanitiaPesertaController extends Controller
                     $row->waktu_daftar
                 ]);
             }
-
             fclose($file);
-
         }, 200, $headers);
+    }
+
+    /**
+     * Export PDF
+     */
+    public function exportPdf(Request $request)
+    {
+        $idPanitia = session('id_panitia');
+
+        $panitia = DB::table('panitia')
+            ->where('id_panitia', $idPanitia)
+            ->first();
+
+        $peserta = $this->pesertaQuery($idPanitia, $request)
+            ->orderByDesc('pendaftaran.waktu_daftar')
+            ->get();
+
+        $totalPeserta = $peserta->count();
+
+        // Ambil informasi event dan sesi untuk filter
+        $eventName = 'Semua Event';
+        $sesiName = 'Semua Sesi';
+
+        if ($request->filled('event')) {
+            $event = DB::table('event')->where('id_event', $request->event)->first();
+            $eventName = $event->nama_event ?? 'Semua Event';
+        }
+
+        if ($request->filled('sesi')) {
+            $sesi = DB::table('sesi')->where('id_sesi', $request->sesi)->first();
+            $sesiName = $sesi->nama_sesi ?? 'Semua Sesi';
+        }
+
+        $data = [
+            'peserta' => $peserta,
+            'panitia' => $panitia,
+            'totalPeserta' => $totalPeserta,
+            'eventName' => $eventName,
+            'sesiName' => $sesiName,
+            'tanggalCetak' => now()->translatedFormat('d F Y H:i'),
+            'filterEvent' => $request->event,
+            'filterSesi' => $request->sesi,
+        ];
+
+        $pdf = Pdf::loadView('panitia.export_pdf', $data);
+        $pdf->setPaper('A4', 'landscape');
+
+        return $pdf->download('data_peserta_' . date('Ymd_His') . '.pdf');
     }
 }
